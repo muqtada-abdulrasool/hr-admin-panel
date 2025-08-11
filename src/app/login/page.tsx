@@ -11,7 +11,6 @@ import styles from "./login.module.css";
 import React, { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-
 import { Checkpassword } from "@/utils/password-checker";
 
 interface RequestBody {
@@ -166,7 +165,11 @@ export default function Login() {
         <div className={styles.login_divider_container}></div>
 
         <div className={styles.login_logo_container}>
-          <img src="/images/Title.png" alt="" className={styles.login_logo} />
+          <img
+            src={process.env.NEXT_PUBLIC_LOGO}
+            alt=""
+            className={styles.login_logo}
+          />
         </div>
       </div>
     </div>

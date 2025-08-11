@@ -19,18 +19,14 @@
   background: var(--foreground-color);
 }
 
-.tables_container {
+.lists_container {
   width: 80%;
   height: 100%;
 
-  border-bottom: solid 2px var(--mui-palette-secondary-main);
-  border-right: solid 2px var(--mui-palette-secondary-main);
-  border-left: solid 2px var(--mui-palette-secondary-main);
-  border-radius: 25px;
-
   background: var(--background-color);
 
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  border: 2px solid var(--mui-palette-secondary-main);
+  border-radius: 25px;
+
+  overflow: hidden;
 }

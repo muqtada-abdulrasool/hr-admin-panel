@@ -4,6 +4,8 @@
 }
 
 :root {
+  --color-scheme: "light";
+
   --primary-color: #f89c1c;
   --primary-light: #f89c1c33;
   --primary-dark: #f78c1b;
@@ -25,15 +27,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --background-color: #0a0a0a;
-    --foreground-color: #ededed;
-    --text-color: #ffff;
-    --reverse-text-color: #000000;
-  }
 }
 
 h1 {

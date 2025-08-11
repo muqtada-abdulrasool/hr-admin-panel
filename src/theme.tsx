@@ -1,42 +1,101 @@
 "use client";
 
-import { Opacity, Palette } from "@mui/icons-material";
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
-let theme = createTheme({
+declare module "@mui/material/styles" {
+  interface Palette {
+    foreground?: string;
+  }
+  interface PaletteOptions {
+    foreground?: string;
+  }
+}
+
+let theme = createTheme({});
+
+theme = createTheme({
   cssVariables: true,
+  colorSchemes: {
+    light: {
+      palette: {
+        mode: "light",
+        primary: {
+          main: "#f89c1c",
+          light: "#f89c1c33",
+          dark: "#f78c1b",
+          contrastText: "#ffffff",
+        },
+        secondary: {
+          main: "#676767",
+          light: "#F89C1C",
+          dark: "#484848",
+        },
+        background: {
+          default: "#f9f8f8",
+        },
+
+        foreground: "#ffffff",
+      },
+    },
+    // dark: {
+    //   palette: {
+    //     mode: "light",
+    //     primary: {
+    //       main: "#ffffff",
+    //       light: "#ffffff",
+    //       dark: "#ffffff",
+    //       contrastText: "#ffffff",
+    //     },
+    //     secondary: {
+    //       main: "#ffffff",
+    //       light: "#ffffff",
+    //       dark: "#ffffff",
+    //     },
+    //   },
+    // },
+  },
   breakpoints: {
     values: {
-      xs: 400, // Extra small (default)
-      sm: 800, // Small (default)
-      md: 1000, // Medium (default)
-      lg: 1200, // Large (default)
-      xl: 1536, // Extra large (default)
-    },
-  },
-  palette: {
-    mode: "light",
-    primary: {
-      main: "#f89c1c",
-      light: "#f89c1c33",
-      dark: "#f78c1b",
-      contrastText: "#ffffff",
-    },
-    secondary: {
-      main: "#676767",
-      light: "#F89C1C",
-      dark: "#484848",
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
     },
   },
   typography: {
-    h1: { fontWeight: "900" },
-    h2: { fontWeight: "900" },
-    h3: { fontWeight: "800" },
-    h4: { fontWeight: "700" },
-    h5: { fontWeight: "500" },
-    h6: { fontWeight: "500" },
-
     fontFamily: ["Tajawal", "Cairo"].join(","),
+    h1: {
+      fontSize: "4rem", // Use rem for responsive sizing
+      fontWeight: 900,
+    },
+    h2: {
+      fontSize: "3rem",
+      fontWeight: 800,
+    },
+    h3: {
+      fontSize: "2.5rem",
+      fontWeight: 700,
+    },
+    h4: {
+      fontSize: "2rem",
+      fontWeight: 600,
+    },
+    h5: {
+      fontSize: "1.5rem",
+      fontWeight: 500,
+    },
+    h6: {
+      fontSize: "1.25rem",
+      fontWeight: 500,
+    },
+    // You can also define other variants
+    body1: {
+      fontSize: "1rem",
+    },
+    button: {
+      textTransform: "none", // A common customization
+    },
   },
   components: {
     MuiTableRow: {
@@ -49,15 +108,6 @@ let theme = createTheme({
         },
       },
     },
-    // MuiButton: {
-    //   styleOverrides: {
-    //     root: {
-    //       height: "3.5rem",
-    //       fontSize: "2rem",
-    //       fontWeight: "800",
-    //     },
-    //   },
-    // },
     MuiListItemButton: {
       styleOverrides: {
         root: {
@@ -104,7 +154,7 @@ let theme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          // backgroundColor: "var(--foreground-color)",
+          backgroundColor: "var(--foreground-color)",
         },
       },
     },

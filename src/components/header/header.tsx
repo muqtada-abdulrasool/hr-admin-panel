@@ -8,6 +8,7 @@ import { Typography } from "@mui/material";
 import UserPFP from "../user-pfp/user-pfp";
 import LangButton from "@/components/lang-button/lang-button";
 import ThemeButton from "@/components/theme-button/theme-button";
+import StylishClock from "@/components//clock/clock";
 
 interface HeaderProps {
   Title: string;
@@ -29,6 +30,7 @@ const Header: React.FC<HeaderProps> = ({ Title }) => {
           {Title}
         </Typography>
       </div>
+      <StylishClock></StylishClock>
 
       <div className={styles.left_side}>
         <LangButton></LangButton>

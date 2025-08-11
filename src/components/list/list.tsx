@@ -27,12 +27,14 @@ interface ListProps {
   title?: string;
   search?: boolean;
   dense?: boolean;
+  autoDense?: boolean;
   denseButton?: boolean;
   func?: React.ReactNode[];
   columns: string[];
   rows: any[][];
   pagination?: number[];
   count?: number;
+  color?: string;
   onclick?: (row: any, key: number) => void;
 }
 
@@ -40,10 +42,12 @@ const list: React.FC<ListProps> = ({
   title = "",
   search = false,
   dense = false,
+  autoDense = false,
   denseButton = false,
   func = [],
   columns,
   rows,
+  color = "var(--mui-palette-foreground)",
   pagination = [10, 25, 50],
   onclick = (r: any, k: number) => {
     r.preventDefault();
@@ -52,7 +56,7 @@ const list: React.FC<ListProps> = ({
   const [searchText, setSearchText] = React.useState("");
   const [searchAttribute, setSearchAttribute] = React.useState(0);
 
-  const [density, setDensity] = React.useState(false);
+  const [density, setDensity] = React.useState(dense);
   const [denseOption, setDenseOption] = React.useState(denseButton);
   const [tableSize, setTableSize] = React.useState<"small" | "medium">(
     "medium"
@@ -73,6 +77,21 @@ const list: React.FC<ListProps> = ({
     setSearchAttribute(child.props["data-index"]);
   };
 
+  const handleRowHref = (rowIndex: number) => {
+    if (typeof window !== undefined) {
+      return window.location.href + "/" + rowIndex.toString();
+    } else if (typeof process.env !== undefined) {
+      return (
+        process.env.NEXT_PUBLIC_SECURITY_STANDARD! +
+        process.env.NEXT_PUBLIC_DOMAIN! +
+        "/" +
+        rowIndex.toString()
+      );
+    } else {
+      return "/";
+    }
+  };
+
   const handleHrefClick = (
     row: React.MouseEvent<HTMLAnchorElement, MouseEvent>
   ) => {
@@ -91,16 +110,18 @@ const list: React.FC<ListProps> = ({
 
   React.useEffect(() => {
     const handleResize = () => {
-      if (window.innerHeight < maxDenseSize && !density) {
-        setDensity(true);
-      } else {
-        setDensity(false);
-      }
+      if (typeof window !== undefined && autoDense) {
+        if (window.innerHeight < maxDenseSize && !density) {
+          setDensity(true);
+        } else {
+          setDensity(false);
+        }
 
-      if (window.innerWidth < maxDenseContainer) {
-        setDenseOption(false);
-      } else {
-        setDenseOption(true);
+        if (window.innerWidth < maxDenseContainer) {
+          setDenseOption(false);
+        } else {
+          setDenseOption(true);
+        }
       }
     };
 
@@ -120,62 +141,69 @@ const list: React.FC<ListProps> = ({
   };
 
   return (
-    <div className={styles.list_container}>
-      <div className={styles.list_header_container}>
-        <div className={styles.list_header_left_side}>
-          {/* Rendering the title*/}
-          <div className={styles.list_title}>
-            {title == "" ? null : <Typography variant="h4">{title}</Typography>}
-            <FancyHR vertical ballsize="0px" length="80%" thickness="1px" />
-          </div>
-          {search ? (
-            /* Rendering the search box*/
-            <div className={styles.search_component}>
-              <Input
-                label="Search"
-                variant="outlined"
-                onChange={(e) => handleSearch(e)}
-                sx={{
-                  "& fieldset": {
-                    borderInlineEnd: "none",
-                    borderStartEndRadius: 0,
-                    borderEndEndRadius: 0,
-                  },
-                }}
-              ></Input>
-              {/* Rendering the attribute box*/}
-              <FormControl>
-                <Select
-                  value={searchAttribute}
-                  onChange={(event, child) =>
-                    handleSearchAttribute(event, child)
-                  }
-                  autoWidth
+    <div className={styles.list_container} style={{ background: color }}>
+      {title == "" && search == false && func.length < 1 ? null : (
+        <div
+          className={styles.list_header_container}
+          style={{ background: color }}
+        >
+          <div className={styles.list_header_left_side}>
+            {/* Rendering the title*/}
+            <div className={styles.list_title}>
+              {title == "" ? null : (
+                <Typography variant="h4">{title}</Typography>
+              )}
+              <FancyHR vertical ballsize="0px" length="80%" thickness="1px" />
+            </div>
+            {search ? (
+              /* Rendering the search box*/
+              <div className={styles.search_component}>
+                <Input
+                  label="Search"
+                  variant="outlined"
+                  onChange={(e) => handleSearch(e)}
                   sx={{
                     "& fieldset": {
-                      borderInlineStart: "none",
-                      borderStartStartRadius: 0,
-                      borderEndStartRadius: 0,
+                      borderInlineEnd: "none",
+                      borderStartEndRadius: 0,
+                      borderEndEndRadius: 0,
                     },
                   }}
-                >
-                  {columns.map((value, index) => (
-                    <MenuItem value={index} data-index={index}>
-                      {value}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </div>
-          ) : null}
+                ></Input>
+                {/* Rendering the attribute box*/}
+                <FormControl>
+                  <Select
+                    value={searchAttribute}
+                    onChange={(event, child) =>
+                      handleSearchAttribute(event, child)
+                    }
+                    autoWidth
+                    sx={{
+                      "& fieldset": {
+                        borderInlineStart: "none",
+                        borderStartStartRadius: 0,
+                        borderEndStartRadius: 0,
+                      },
+                    }}
+                  >
+                    {columns.map((value, index) => (
+                      <MenuItem value={index} data-index={index}>
+                        {value}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+            ) : null}
+          </div>
+          {/* Rendering all custom components for actions*/}
+          <div className={styles.list_header_right_side}>
+            {func?.map((component, index) => (
+              <div key={index}>{component}</div>
+            ))}
+          </div>
         </div>
-        {/* Rendering all custom components for actions*/}
-        <div className={styles.list_header_right_side}>
-          {func?.map((component, index) => (
-            <div key={index}>{component}</div>
-          ))}
-        </div>
-      </div>
+      )}
       {/* Rendering the table*/}
       <TableContainer
         className={styles.scrollableContainer}
@@ -186,7 +214,12 @@ const list: React.FC<ListProps> = ({
           <TableHead>
             <TableRow>
               {columns.map((columnName, index) => (
-                <TableCell key={index} align="left" sx={{ maxWidth: "1rem" }}>
+                <TableCell
+                  key={index}
+                  align="left"
+                  sx={{ maxWidth: "1rem" }}
+                  style={{ backgroundColor: color }}
+                >
                   <Typography
                     sx={{
                       display: "inline-block",
@@ -222,10 +255,12 @@ const list: React.FC<ListProps> = ({
                   tabIndex={-1}
                   key={rowIndex}
                   component={Link}
-                  href={window.location.href + "/" + rowIndex.toString()}
-                  sx={{ textDecoration: "none" }}
+                  href={handleRowHref(rowIndex)}
                   onClick={(event) => handleHrefClick(event)}
                   onDoubleClick={(event) => onclick(event, rowIndex)}
+                  sx={{
+                    textDecoration: "none",
+                  }}
                 >
                   {row.map((cell, cellIndex) => (
                     <TableCell

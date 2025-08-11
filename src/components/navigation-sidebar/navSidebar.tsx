@@ -82,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0 }) => {
       id="navSidebar"
       style={Locked ? { width: "20rem" } : { width: "" }}
     >
-      <img src="/images/Title.png" className={styles.navLogo}></img>
+      <img src={process.env.NEXT_PUBLIC_LOGO} className={styles.navLogo}></img>
       <FancyHR></FancyHR>
       <nav aria-label="main mailbox folders" style={{ width: "100%" }}>
         <List>

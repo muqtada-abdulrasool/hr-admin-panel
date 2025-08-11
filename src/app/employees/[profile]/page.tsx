@@ -6,33 +6,77 @@ import styles from "./profile.module.css";
 import NavSidebar from "@/components/navigation-sidebar/navSidebar";
 import Header from "@/components/header/header";
 import UserPanel from "@/components/user-panel/user-panel";
-import { Box, Tabs, Tab } from "@mui/material";
-import FancyHR from "@/components/fancy-hr/fancy-hr";
+import TabsContainer from "@/components/tabs-container/tabs-container";
+import List from "@/components/list/list";
+import {
+  exampleCertificates,
+  exampleRequests,
+  exampleRoadmaps,
+} from "@/utils/example-data";
 
 export default function Profile() {
-  const [value, setValue] = React.useState(0);
+  let examplerows: string[][];
+  examplerows = exampleCertificates;
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
+  let examplerows2: string[][];
+  examplerows2 = exampleRequests;
+
+  let examplerows3: string[][];
+  examplerows3 = exampleRoadmaps;
+
   return (
     <div className="home_page_container">
       <NavSidebar index={-1}></NavSidebar>
       <div className="home_content_container">
-        <Header Title="Meow"></Header>
+        <Header Title="Muqtada Abdulrasool"></Header>
         <div className={styles.content_container}>
           <UserPanel></UserPanel>
-          <div className={styles.tables_container}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              centered
-              variant="fullWidth"
-            >
-              <Tab label="CERTIFICATES " sx={{ fontSize: "1rem" }} />
-              <Tab label="REQUESTS" sx={{ fontSize: "1rem" }} />
-              <Tab label="ROADMAPS" sx={{ fontSize: "1rem" }} />
-            </Tabs>
+          <div className={styles.lists_container}>
+            <TabsContainer
+              tabTitles={["CERTIFICATES", "REQUESTS", "ROADMAPS"]}
+              defaultTab={1}
+              tabs={[
+                <List
+                  columns={[
+                    "Name",
+                    "Date of Acquisition",
+                    "Date of Expiration",
+                    "Skill",
+                    "Points to Skill",
+                  ]}
+                  rows={examplerows}
+                  denseButton={false}
+                  dense={true}
+                  autoDense={false}
+                  pagination={[25, 50, 100]}
+                  color="var(--mui-palette-background-default)"
+                ></List>,
+                <List
+                  columns={["Title", "Description", "Sender", "Type", "Status"]}
+                  rows={examplerows2}
+                  denseButton={false}
+                  dense={true}
+                  autoDense={false}
+                  pagination={[25, 50, 100]}
+                  color="var(--mui-palette-background-default)"
+                ></List>,
+                <List
+                  columns={[
+                    "Name",
+                    "Current Step",
+                    "Progress",
+                    "Difficulty",
+                    "Estimated Completion Time",
+                  ]}
+                  rows={examplerows3}
+                  denseButton={false}
+                  dense={true}
+                  autoDense={false}
+                  pagination={[25, 50, 100]}
+                  color="var(--mui-palette-background-default)"
+                ></List>,
+              ]}
+            ></TabsContainer>
           </div>
         </div>
       </div>

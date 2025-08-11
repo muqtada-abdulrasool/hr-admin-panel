@@ -31,7 +31,14 @@ export default function RootLayout({
           <AuthProvider>
             <I18nextProvider i18n={i18n}>
               <DirectionProvider>
-                <ThemeProvider theme={theme}>{children}</ThemeProvider>
+                <ThemeProvider
+                  theme={theme}
+                  noSsr
+                  i18nIsDynamicList
+                  defaultMode="light"
+                >
+                  {children}
+                </ThemeProvider>
               </DirectionProvider>
             </I18nextProvider>
           </AuthProvider>
