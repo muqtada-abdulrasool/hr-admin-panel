@@ -5,9 +5,13 @@ import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 declare module "@mui/material/styles" {
   interface Palette {
     foreground?: string;
+    niceRed?: string;
+    niceBlue?: string;
   }
   interface PaletteOptions {
     foreground?: string;
+    niceRed?: string;
+    niceBlue?: string;
   }
 }
 
@@ -35,6 +39,8 @@ theme = createTheme({
         },
 
         foreground: "#ffffff",
+        niceRed: "#B83B40",
+        niceBlue: "#0C8CE9",
       },
     },
     // dark: {

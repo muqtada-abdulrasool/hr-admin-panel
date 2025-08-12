@@ -13,6 +13,7 @@ import {
   exampleRequests,
   exampleRoadmaps,
 } from "@/utils/example-data";
+import HomePage from "@/components/home-page/home-page";
 
 export default function Profile() {
   let examplerows: string[][];
@@ -24,62 +25,58 @@ export default function Profile() {
   let examplerows3: string[][];
   examplerows3 = exampleRoadmaps;
 
-  return (
-    <div className="home_page_container">
-      <NavSidebar index={-1}></NavSidebar>
-      <div className="home_content_container">
-        <Header Title="Muqtada Abdulrasool"></Header>
-        <div className={styles.content_container}>
-          <UserPanel></UserPanel>
-          <div className={styles.lists_container}>
-            <TabsContainer
-              tabTitles={["CERTIFICATES", "REQUESTS", "ROADMAPS"]}
-              defaultTab={1}
-              tabs={[
-                <List
-                  columns={[
-                    "Name",
-                    "Date of Acquisition",
-                    "Date of Expiration",
-                    "Skill",
-                    "Points to Skill",
-                  ]}
-                  rows={examplerows}
-                  denseButton={false}
-                  dense={true}
-                  autoDense={false}
-                  pagination={[25, 50, 100]}
-                  color="var(--mui-palette-background-default)"
-                ></List>,
-                <List
-                  columns={["Title", "Description", "Sender", "Type", "Status"]}
-                  rows={examplerows2}
-                  denseButton={false}
-                  dense={true}
-                  autoDense={false}
-                  pagination={[25, 50, 100]}
-                  color="var(--mui-palette-background-default)"
-                ></List>,
-                <List
-                  columns={[
-                    "Name",
-                    "Current Step",
-                    "Progress",
-                    "Difficulty",
-                    "Estimated Completion Time",
-                  ]}
-                  rows={examplerows3}
-                  denseButton={false}
-                  dense={true}
-                  autoDense={false}
-                  pagination={[25, 50, 100]}
-                  color="var(--mui-palette-background-default)"
-                ></List>,
+  const Content = (
+    <div className={styles.content_container}>
+      <UserPanel></UserPanel>
+      <div className={styles.lists_container}>
+        <TabsContainer
+          tabTitles={["CERTIFICATES", "REQUESTS", "ROADMAPS"]}
+          defaultTab={1}
+          tabs={[
+            <List
+              columns={[
+                "Name",
+                "Date of Acquisition",
+                "Date of Expiration",
+                "Skill",
+                "Points to Skill",
               ]}
-            ></TabsContainer>
-          </div>
-        </div>
+              rows={examplerows}
+              denseButton={false}
+              dense={true}
+              autoDense={false}
+              pagination={[25, 50, 100]}
+              color="var(--mui-palette-background-default)"
+            ></List>,
+            <List
+              columns={["Title", "Description", "Sender", "Type", "Status"]}
+              rows={examplerows2}
+              denseButton={false}
+              dense={true}
+              autoDense={false}
+              pagination={[25, 50, 100]}
+              color="var(--mui-palette-background-default)"
+            ></List>,
+            <List
+              columns={[
+                "Name",
+                "Current Step",
+                "Progress",
+                "Difficulty",
+                "Estimated Completion Time",
+              ]}
+              rows={examplerows3}
+              denseButton={false}
+              dense={true}
+              autoDense={false}
+              pagination={[25, 50, 100]}
+              color="var(--mui-palette-background-default)"
+            ></List>,
+          ]}
+        ></TabsContainer>
       </div>
     </div>
   );
+
+  return <HomePage content={Content} sideBarIndex={-1}></HomePage>;
 }
