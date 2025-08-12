@@ -153,6 +153,15 @@ label {
   gap: var(--global-padding);
 }
 
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--mui-palette-secondary-main);
+  border-radius: 4px;
+}
+
 @media screen and ((max-width: 700px) or (max-height: 700px)) {
   :root {
     --global-padding: 1rem;

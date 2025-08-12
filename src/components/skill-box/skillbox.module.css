@@ -55,12 +55,3 @@
   background: var(--mui-palette-primary-main);
   border-radius: 25px;
 }
-
-.skill_scroll_container::-webkit-scrollbar {
-  width: 8px;
-}
-
-.skill_scroll_container::-webkit-scrollbar-thumb {
-  background-color: var(--mui-palette-secondary-main);
-  border-radius: 25px;
-}

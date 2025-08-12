@@ -27,12 +27,3 @@
 
   overflow-y: scroll;
 }
-
-.user_scroll_panel::-webkit-scrollbar {
-  width: 8px;
-}
-
-.user_scroll_panel::-webkit-scrollbar-thumb {
-  background-color: var(--mui-palette-secondary-main);
-  border-radius: 25px;
-}

@@ -48,15 +48,6 @@
   overflow-y: scroll;
 }
 
-.scrollableContainer::-webkit-scrollbar {
-  width: 8px;
-}
-
-.scrollableContainer::-webkit-scrollbar-thumb {
-  background-color: var(--mui-palette-secondary-main);
-  border-radius: 4px;
-}
-
 .paginationContainer {
   display: flex;
   justify-content: space-between;
