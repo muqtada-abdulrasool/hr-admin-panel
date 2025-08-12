@@ -78,36 +78,6 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
         id="navSidebar"
         style={Locked ? { width: "24rem" } : { width: "" }}
       >
-        {popupable ? (
-          <div
-            style={{
-              width: "100%",
-              height: "fit-content",
-              padding: "1rem 0.5rem",
-              display: "flex",
-              flexDirection: "column",
-              gap: "1rem",
-            }}
-          >
-            <Fab
-              variant="extended"
-              sx={{
-                width: "100%",
-                boxShadow: "none",
-                background: "transparent",
-                border: "2px solid var(--mui-palette-secondary-main)",
-              }}
-              onClick={() => {
-                if (callback) {
-                  callback();
-                }
-              }}
-            >
-              <BackArrow />
-            </Fab>
-            <FancyHR />
-          </div>
-        ) : null}
         <div className={styles.navLogoContainer}>
           <img
             src={process.env.NEXT_PUBLIC_LOGO}
