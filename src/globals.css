@@ -1,6 +1,8 @@
 * {
   margin: 0px;
   padding: 0px;
+  transition: color var(--color-transition) linear,
+    background-color var(--color-transition) linear;
 }
 
 :root {
@@ -21,8 +23,10 @@
 
   --global-padding: 2rem;
 
+  --color-transition: 0.15s;
+
   height: 100%;
-  min-height: 100dvh;
+  min-height: 100vh;
 
   display: flex;
   justify-content: center;

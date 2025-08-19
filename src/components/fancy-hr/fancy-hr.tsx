@@ -13,7 +13,7 @@ const FancyHR: React.FC<FancyHRprops> = ({
   vertical = false,
   length = "100%",
   ballsize = "10px",
-  thickness = "2px",
+  thickness = "0.125rem",
 }) => {
   if (!vertical) {
     return (
@@ -28,7 +28,7 @@ const FancyHR: React.FC<FancyHRprops> = ({
       >
         <div
           style={{
-            background: "var(--secondary-color)",
+            backgroundColor: "var(--mui-palette-secondary-main)",
             width: ballsize,
             height: ballsize,
             borderRadius: ballsize,
@@ -38,7 +38,7 @@ const FancyHR: React.FC<FancyHRprops> = ({
         <div
           style={{
             border: "none",
-            background: "var(--secondary-color)",
+            backgroundColor: "var(--mui-palette-secondary-main)",
             height: thickness,
             width: length,
           }}
@@ -46,7 +46,7 @@ const FancyHR: React.FC<FancyHRprops> = ({
 
         <div
           style={{
-            background: "var(--secondary-color)",
+            backgroundColor: "var(--mui-palette-secondary-main)",
             width: ballsize,
             height: ballsize,
             borderRadius: ballsize,
@@ -67,7 +67,7 @@ const FancyHR: React.FC<FancyHRprops> = ({
       >
         <div
           style={{
-            background: "var(--secondary-color)",
+            backgroundColor: "var(--mui-palette-secondary-main)",
             width: ballsize,
             height: ballsize,
             borderRadius: ballsize,
@@ -77,7 +77,7 @@ const FancyHR: React.FC<FancyHRprops> = ({
         <div
           style={{
             border: "none",
-            background: "var(--secondary-color)",
+            backgroundColor: "var(--mui-palette-secondary-main)",
             height: length,
             width: thickness,
           }}
@@ -85,7 +85,7 @@ const FancyHR: React.FC<FancyHRprops> = ({
 
         <div
           style={{
-            background: "var(--secondary-color)",
+            backgroundColor: "var(--mui-palette-secondary-main)",
             width: ballsize,
             height: ballsize,
             borderRadius: ballsize,

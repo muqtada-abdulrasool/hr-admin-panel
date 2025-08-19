@@ -30,6 +30,7 @@ const Header: React.FC<HeaderProps> = ({
             "@media (max-width: 450px)": {
               fontSize: "1.2rem",
             },
+            color: "var(--mui-palette-text-primary)",
           }}
         >
           {Title}
@@ -52,9 +53,9 @@ const Header: React.FC<HeaderProps> = ({
           <Hamburger />
         </Fab>
       </div>
-      <div className={styles.middle_container}>
+      {/* <div className={styles.middle_container}>
         <StylishClock></StylishClock>
-      </div>
+      </div> */}
 
       <div className={styles.right_side}>
         <LangButton></LangButton>

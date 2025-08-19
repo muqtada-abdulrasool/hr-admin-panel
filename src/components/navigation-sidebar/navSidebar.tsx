@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./navSidebar.module.css";
-import { BottomPanel, ShrunkenBottomPanel } from "./navBottomPanel";
+import { useStore } from "@/utils/store";
 import FancyHR from "../fancy-hr/fancy-hr";
 
 import React, { useEffect, useRef, useState } from "react";
@@ -27,7 +27,7 @@ import Power from "@mui/icons-material/PowerSettingsNew";
 import Gear from "@mui/icons-material/Settings";
 import Unlock from "@mui/icons-material/LockOpen";
 import Lock from "@mui/icons-material/Lock";
-import BackArrow from "@mui/icons-material/ArrowBack";
+import getAsset from "@/utils/asset-retriever";
 
 interface SidebarProps {
   index?: number;
@@ -36,10 +36,17 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
+  const Locked = useStore((state) => state.lock);
+  const setLocked = useStore((state) => state.setLock);
+
   const [selectedIndex, setSelectedIndex] = useState(index);
-  const [Locked, setLocked] = useState(true);
   const [popupable, setPopable] = useState(false);
   const { t } = useTranslation();
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   useEffect(() => {
     if (popup) {
@@ -48,18 +55,20 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
   }, [popup]);
 
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 800) {
-        setLocked(true);
-        setPopable(true);
-      } else {
-        setPopable(false);
-      }
-    };
+    if (typeof window !== "undefined") {
+      const handleResize = () => {
+        if (window.innerWidth < 800) {
+          setLocked(true);
+          setPopable(true);
+        } else {
+          setPopable(false);
+        }
+      };
 
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
+      window.addEventListener("resize", handleResize);
+      handleResize();
+      return () => window.removeEventListener("resize", handleResize);
+    }
   }, []);
 
   const handleListItemClick = (
@@ -68,6 +77,12 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
   ) => {
     setSelectedIndex(index);
   };
+
+  if (!hydrated) {
+    return null;
+  }
+
+  console.log(getAsset("logo"));
 
   return (
     <div style={{ height: "100%" }}>
@@ -79,10 +94,7 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
         style={Locked ? { width: "24rem" } : { width: "" }}
       >
         <div className={styles.navLogoContainer}>
-          <img
-            src={process.env.NEXT_PUBLIC_LOGO}
-            className={styles.navLogo}
-          ></img>
+          <img src={getAsset("logo")} className={styles.navLogo}></img>
           <FancyHR></FancyHR>
         </div>
         <nav aria-label="main mailbox folders" style={{ width: "100%" }}>
@@ -102,7 +114,7 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
                 </ListItemIcon>
                 <ListItemText
                   primary={t("navbar.item1")}
-                  sx={{ textAlign: "start" }}
+                  sx={{ textAlign: "start", textWrap: "nowrap" }}
                 />
               </ListItemButton>
             </ListItem>
@@ -119,7 +131,10 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
                 <ListItemIcon>
                   <Email />
                 </ListItemIcon>
-                <ListItemText primary={t("navbar.item2")} />
+                <ListItemText
+                  primary={t("navbar.item2")}
+                  sx={{ textAlign: "start", textWrap: "nowrap" }}
+                />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
@@ -135,7 +150,10 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
                 <ListItemIcon>
                   <People />
                 </ListItemIcon>
-                <ListItemText primary={t("navbar.item3")} />
+                <ListItemText
+                  primary={t("navbar.item3")}
+                  sx={{ textAlign: "start", textWrap: "nowrap" }}
+                />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
@@ -151,7 +169,10 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
                 <ListItemIcon>
                   <Certificates />
                 </ListItemIcon>
-                <ListItemText primary={t("navbar.item4")} />
+                <ListItemText
+                  primary={t("navbar.item4")}
+                  sx={{ textAlign: "start", textWrap: "nowrap" }}
+                />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
@@ -167,7 +188,10 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
                 <ListItemIcon>
                   <Roadmaps />
                 </ListItemIcon>
-                <ListItemText primary={t("navbar.item5")} />
+                <ListItemText
+                  primary={t("navbar.item5")}
+                  sx={{ textAlign: "start", textWrap: "nowrap" }}
+                />
               </ListItemButton>
             </ListItem>
           </List>

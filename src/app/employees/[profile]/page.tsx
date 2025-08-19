@@ -3,8 +3,6 @@
 import React from "react";
 import styles from "./profile.module.css";
 
-import NavSidebar from "@/components/navigation-sidebar/navSidebar";
-import Header from "@/components/header/header";
 import UserPanel from "@/components/user-panel/user-panel";
 import TabsContainer from "@/components/tabs-container/tabs-container";
 import List from "@/components/list/list";
@@ -46,7 +44,7 @@ export default function Profile() {
               dense={true}
               autoDense={false}
               pagination={[25, 50, 100]}
-              color="var(--mui-palette-background-default)"
+              color="var(--mui-palette-foreground)"
             ></List>,
             <List
               columns={["Title", "Description", "Sender", "Type", "Status"]}
@@ -55,7 +53,7 @@ export default function Profile() {
               dense={true}
               autoDense={false}
               pagination={[25, 50, 100]}
-              color="var(--mui-palette-background-default)"
+              color="var(--mui-palette-foreground)"
             ></List>,
             <List
               columns={[
@@ -70,7 +68,7 @@ export default function Profile() {
               dense={true}
               autoDense={false}
               pagination={[25, 50, 100]}
-              color="var(--mui-palette-background-default)"
+              color="var(--mui-palette-foreground)"
             ></List>,
           ]}
         ></TabsContainer>
@@ -78,5 +76,11 @@ export default function Profile() {
     </div>
   );
 
-  return <HomePage content={Content} sideBarIndex={-1}></HomePage>;
+  return (
+    <HomePage
+      content={Content}
+      sideBarIndex={-1}
+      contextBoxVisibility={false}
+    ></HomePage>
+  );
 }

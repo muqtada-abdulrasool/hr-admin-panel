@@ -4,9 +4,9 @@
 
   width: 100%;
 
-  background: var(--foreground-color);
+  background: var(--mui-palette-foreground);
 
-  border: 2px solid var(--secondary-color);
+  border: 0.125rem solid var(--mui-palette-secondary-main);
   border-radius: 15px;
 
   padding: 0.625rem 1.875rem;
@@ -58,9 +58,9 @@
 }
 
 @media screen and (max-width: 800px) {
-  .right_side {
+  /* .right_side {
     display: none;
-  }
+  } */
   .left_side_pc {
     display: none;
   }

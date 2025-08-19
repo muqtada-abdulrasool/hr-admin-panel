@@ -9,7 +9,7 @@
   justify-content: center;
   align-items: center;
 
-  background: var(--background-color);
+  background: var(--mui-palette-background-default);
 }
 
 .login_content_container {

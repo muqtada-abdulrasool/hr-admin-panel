@@ -1,19 +1,17 @@
 "use client";
 
-import Sidebar from "@/components/navigation-sidebar/navSidebar";
-import Header from "@/components/header/header";
+import React from "react";
+import styles from "./employees.module.css";
 import List from "@/components/list/list";
 
-import styles from "./employees.module.css";
-
-import { Button, Typography } from "@mui/material";
+import { Fab } from "@mui/material";
 import Plus from "@mui/icons-material/Add";
 import { exampleEmployees } from "@/utils/example-data";
 import HomePage from "@/components/home-page/home-page";
 
 export default function Home() {
   const handleRowClick = (row: any, key: number) => {
-    if (typeof window !== undefined) {
+    if (typeof window !== "undefined") {
       window.location.href = window.location.href + "/" + key.toString();
     }
   };
@@ -23,19 +21,19 @@ export default function Home() {
 
   const Content = (
     <List
-      title="Table of Employees"
+      title="Employees"
       search
       dense={false}
       denseButton
       func={[
-        <Button size="medium" variant="contained" endIcon={<Plus />}>
-          <Typography
-            variant="h6"
-            color="var(--mui-palette-primary-contrastText)"
-          >
-            CREATE
-          </Typography>
-        </Button>,
+        <Fab
+          size="medium"
+          variant="circular"
+          color="primary"
+          sx={{ color: "var(--mui-palette-primary-contrastText)" }}
+        >
+          <Plus />
+        </Fab>,
       ]}
       onclick={(row, key) => handleRowClick(row, key)}
       columns={["Full Name", "Mobile", "Position", "Date of Employement"]}

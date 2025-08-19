@@ -78,7 +78,7 @@ const list: React.FC<ListProps> = ({
   };
 
   const handleRowHref = (rowIndex: number) => {
-    if (typeof window !== undefined) {
+    if (typeof window !== "undefined") {
       return window.location.href + "/" + rowIndex.toString();
     } else if (typeof process.env !== undefined) {
       return (
@@ -110,7 +110,7 @@ const list: React.FC<ListProps> = ({
 
   React.useEffect(() => {
     const handleResize = () => {
-      if (typeof window !== undefined && autoDense) {
+      if (typeof window !== "undefined" && autoDense) {
         if (window.innerHeight < maxDenseSize && !density) {
           setDensity(true);
         } else {
@@ -125,7 +125,9 @@ const list: React.FC<ListProps> = ({
       }
     };
 
-    window.addEventListener("resize", handleResize);
+    if (typeof window !== "undefined" && autoDense) {
+      window.addEventListener("resize", handleResize);
+    }
     handleResize();
   }, []);
 
@@ -211,7 +213,14 @@ const list: React.FC<ListProps> = ({
       >
         <Table stickyHeader aria-label="sticky table" size={tableSize}>
           {/* Rendering the header columns*/}
-          <TableHead>
+          <TableHead
+            sx={{
+              // boxShadow: "0px 6px 10px rgba(0, 0, 0, 0.1)",
+              position: "sticky",
+              top: 0,
+              outline: "2px solid var(--mui-palette-secondary-light)",
+            }}
+          >
             <TableRow>
               {columns.map((columnName, index) => (
                 <TableCell
@@ -227,6 +236,8 @@ const list: React.FC<ListProps> = ({
                       textOverflow: "ellipsis",
                       whiteSpace: "nowrap",
                       width: "100%",
+                      fontWeight: "500",
+                      fontSize: "1.2rem",
                     }}
                   >
                     {columnName}

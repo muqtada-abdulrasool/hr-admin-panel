@@ -5,9 +5,9 @@
 
   box-sizing: border-box;
 
-  background: var(--background-color);
+  background: var(--mui-palette-foreground);
 
-  border: 2px solid var(--mui-palette-secondary-main);
+  border: 0.125rem solid var(--mui-palette-secondary-main);
   border-radius: 25px;
 
   overflow-y: hidden;

@@ -1,7 +1,7 @@
 "use client";
 
 import Cookies from "js-cookie";
-import generateUUID from "./uuid";
+import generateUUID from "@/utils/uuid";
 
 import Input from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -12,6 +12,8 @@ import React, { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Checkpassword } from "@/utils/password-checker";
+import { Alert } from "@mui/material";
+import getAsset from "@/utils/asset-retriever";
 
 interface RequestBody {
   email: string;
@@ -27,28 +29,29 @@ export default function Login() {
   const [deviceID, setDeviceID] = React.useState("");
   const { t } = useTranslation();
 
-  React.useEffect(() => {
-    setDeviceID(getOrSetDeviceIdentifier());
-  }, []);
+  // React.useEffect(() => {
+  //   setDeviceID(getOrSetDeviceIdentifier());
+  // }, []);
 
-  function getOrSetDeviceIdentifier() {
-    let tmpDeviceIdentifier = Cookies.get("deviceIdentifier");
-    let deviceIdentifier: string;
+  // function getOrSetDeviceIdentifier() {
+  //   let tmpDeviceIdentifier = Cookies.get("deviceIdentifier");
+  //   let deviceIdentifier: string;
 
-    if (typeof tmpDeviceIdentifier !== undefined) {
-      deviceIdentifier = tmpDeviceIdentifier!;
-    } else {
-      deviceIdentifier = generateUUID();
-      Cookies.set("deviceIdentifier", deviceIdentifier, {
-        expires: 365,
-        sameSite: "strict",
-      });
-    }
+  //   if (typeof tmpDeviceIdentifier !== undefined) {
+  //     deviceIdentifier = tmpDeviceIdentifier!;
+  //   } else {
+  //     deviceIdentifier = generateUUID();
+  //     Cookies.set("deviceIdentifier", deviceIdentifier, {
+  //       expires: 365,
+  //       sameSite: "strict",
+  //     });
+  //   }
 
-    return deviceIdentifier;
-  }
+  //   return deviceIdentifier;
+  // }
 
   async function fetchDataFromSwaggerAPI(name: string, pass: string) {
+    console.log("meow");
     try {
       const Data: RequestBody = {
         email: name,
@@ -57,13 +60,13 @@ export default function Login() {
       };
 
       const testData: RequestBody = {
-        email: "test@gmail.com",
-        password: "P@ssword12345",
+        email: "thedarksoul622@gmail.com",
+        password: "$TR!NG12345",
         deviceID: "string",
       };
 
       let response = await fetch(
-        "http://" + process.env.NEXT_PUBLIC_PUBLIC_API_URL + "/api/Auth/Login",
+        "http://" + process.env.NEXT_PUBLIC_PUBLIC_API_URL + "/api/Auth",
         {
           method: "POST",
           body: JSON.stringify(testData),
@@ -77,8 +80,8 @@ export default function Login() {
         throw new Error(`HTTP error! status: ${response.status}`);
       } else {
         const JSONBody = await response.json();
-        // Cookies.set("refreshToken", JSONBody.data.token, {});
-        // Cookies.set("userID", JSONBody.data.userID, {});
+        Cookies.set("userID", JSONBody.data.userID, {});
+        Cookies.set("refreshToken", JSONBody.data.refreshToken, {});
       }
     } catch (e) {
       console.log(e);
@@ -137,7 +140,7 @@ export default function Login() {
               required
             ></Input>
             {passError ? (
-              <Typography variant="subtitle1" color="red">
+              <Alert severity="error">
                 {passErrorText.map((item, index) => (
                   // Add a line break after each item except the last one
                   <span key={index}>
@@ -145,7 +148,7 @@ export default function Login() {
                     {index < passErrorText.length - 1 && <br />}
                   </span>
                 ))}
-              </Typography>
+              </Alert>
             ) : null}
 
             <FancyHR />
@@ -165,11 +168,7 @@ export default function Login() {
         <div className={styles.login_divider_container}></div>
 
         <div className={styles.login_logo_container}>
-          <img
-            src={process.env.NEXT_PUBLIC_LOGO}
-            alt=""
-            className={styles.login_logo}
-          />
+          <img src={getAsset("logo")} alt="" className={styles.login_logo} />
         </div>
       </div>
     </div>

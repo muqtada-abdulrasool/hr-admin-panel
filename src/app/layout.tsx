@@ -1,12 +1,11 @@
 "use client";
 
-import React from "react";
 import "@/globals.css";
+import React, { useEffect } from "react";
 import styles from "./home.module.css";
-import theme from "@/theme";
-
+import { lightTheme, darkTheme } from "@/theme";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
-import { ThemeProvider } from "@mui/material/styles";
+import { ThemeContextProvider } from "@/utils/theme-context";
 import { AuthProvider } from "@/utils/auth-context";
 import { I18nextProvider } from "react-i18next";
 import DirectionProvider from "@/utils/direction-provider";
@@ -17,8 +16,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  if (typeof window !== "undefined" && window.localStorage) {
+    localStorage.getItem("language");
+  }
+
   return (
-    <html lang="en" dir="ltr">
+    <html lang="en" dir={"ltr"}>
       <head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <link
@@ -27,22 +30,15 @@ export default function RootLayout({
         ></link>
       </head>
       <body className={styles.root_container}>
-        <AppRouterCacheProvider>
-          <AuthProvider>
-            <I18nextProvider i18n={i18n}>
-              <DirectionProvider>
-                <ThemeProvider
-                  theme={theme}
-                  noSsr
-                  i18nIsDynamicList
-                  defaultMode="light"
-                >
-                  {children}
-                </ThemeProvider>
-              </DirectionProvider>
-            </I18nextProvider>
-          </AuthProvider>
-        </AppRouterCacheProvider>
+        <I18nextProvider i18n={i18n}>
+          <DirectionProvider>
+            <AppRouterCacheProvider>
+              <AuthProvider>
+                <ThemeContextProvider>{children}</ThemeContextProvider>
+              </AuthProvider>
+            </AppRouterCacheProvider>
+          </DirectionProvider>
+        </I18nextProvider>
       </body>
     </html>
   );

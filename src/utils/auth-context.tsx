@@ -26,34 +26,41 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [jwt, setJwt] = useState(null);
 
+  // const token = Cookies.get("refreshToken");
+  // const userID = Cookies.get("userID");
+
+  const token =
+    "JpY2AlyhEW2u3gnv9cJJg8ATx0UQYQxf/4lzbBkBwUFjgwy4Tw16e1K8O/1DUxWId+ArUBQSaHmKWiZWNyjDsg==";
+  const userID = "3";
+
   const fetchNewJwt = async () => {
     try {
       const response = await fetch(
-        "http://" + process.env.NEXT_PUBLIC_PUBLIC_API_URL + "/api/Auth/test",
+        "http://" + process.env.NEXT_PUBLIC_PUBLIC_API_URL + "/api/Auth",
         {
           method: "GET",
           credentials: "include",
           headers: {
-            // Cookies: `refreshToken=${encodeURIComponent(
-            //   Cookies.get("refreshToken")!
-            // )}; userID=${Cookies.get("userID")};`,
-            // Cookies: `refreshToken=DTMJuXAjqKiUsv0JvrHu4%2B0v%2BxsLCdqrOO%2BMsAIJPrZHZL82Rvc0gbksaBqg2ZflS8u1Gl4SitOJgZglEkwVGg%3D%3D; userID=2`,
+            "X-Refresh-Token": token!,
+            "X-User-ID": userID!,
           },
         }
       );
-      if (!response.ok) {
-        if (response.status === 401) {
-          if (window.location.pathname !== "/Login") {
-            // window.location.href = "/Login";
-            console.log(window.location.href);
-          }
-          return;
-        }
-        // throw new Error(Error: "${response.statusText}");
-      }
+      // if (!response.ok) {
+      //   if (response.status === 401) {
+      //     if (window.location.pathname !== "/Login") {
+      //       window.location.href = "/Login";
+      //       console.log(window.location.href);
+      //     }
+      //     return;
+      //   }
+      //   // throw new Error(Error: "${response.statusText}");
+      // }
 
-      const data = await response.json();
-      setJwt(data.data);
+      // const data = await response.json();
+      // setJwt(data.data);
+
+      console.log(response);
     } catch (err: any) {
       console.log(err);
     }

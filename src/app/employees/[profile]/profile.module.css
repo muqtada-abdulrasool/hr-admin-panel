@@ -4,9 +4,8 @@
 
   box-sizing: border-box;
 
-  padding: 2rem;
+  padding: 1rem;
 
-  border: 2px solid var(--secondary-color);
   border-radius: 25px;
 
   overflow-x: hidden;
@@ -16,16 +15,16 @@
   flex-direction: row;
   gap: 2rem;
 
-  background: var(--foreground-color);
+  /* background: var(--mui-palette-foreground); */
 }
 
 .lists_container {
   width: 80%;
   height: 100%;
 
-  background: var(--background-color);
+  background: var(--mui-palette-foreground);
 
-  border: 2px solid var(--mui-palette-secondary-main);
+  border: 0.125rem solid var(--mui-palette-secondary-main);
   border-radius: 25px;
 
   overflow: hidden;

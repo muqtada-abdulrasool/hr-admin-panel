@@ -8,12 +8,14 @@ interface HomePageProps {
   content: any;
   sideBarIndex?: number;
   headerTite?: string;
+  contextBoxVisibility?: boolean;
 }
 
 const HomePage: React.FC<HomePageProps> = ({
   content,
   sideBarIndex = 0,
   headerTite = "Muqtada Abdulrasool",
+  contextBoxVisibility = true,
 }) => {
   const [popup, setPopup] = useState(false);
   return (
@@ -42,7 +44,15 @@ const HomePage: React.FC<HomePageProps> = ({
             setPopup(true);
           }}
         ></Header>
-        <div className={styles.content_container}>{content}</div>
+        <div
+          className={
+            contextBoxVisibility
+              ? styles.content_container
+              : styles.content_container_invisible
+          }
+        >
+          {content}
+        </div>
       </div>
     </div>
   );

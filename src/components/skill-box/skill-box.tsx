@@ -21,7 +21,7 @@ const SkillBox: React.FC<SkillBoxProps> = ({ title = "Skillbox", skills }) => {
       <div
         style={{
           transform: "translateY(16px)",
-          background: "var(--background-color)",
+          background: "var(--mui-palette-foreground)",
         }}
       >
         <Typography variant="h6">{title}</Typography>

@@ -14,7 +14,7 @@ interface UserPFPProps {
 
 const UserPFP: React.FC<UserPFPProps> = ({
   roundness = "100%",
-  lineThickness = "2px",
+  lineThickness = "0.125rem",
   image = "images/User.png",
   size = "3.5rem",
 }) => {

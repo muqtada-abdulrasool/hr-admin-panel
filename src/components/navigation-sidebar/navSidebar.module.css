@@ -4,9 +4,9 @@
   min-width: 4.8rem;
   max-width: 17rem;
 
-  background: var(--foreground-color);
+  background-color: var(--mui-palette-foreground);
 
-  border-inline-end: var(--secondary-color) solid 2px;
+  border-inline-end: var(--mui-palette-secondary-main) solid 0.125rem;
   box-sizing: border-box;
   border-start-end-radius: 25px;
   border-end-end-radius: 25px;
@@ -21,7 +21,8 @@
 
   padding: 2rem 0.5rem;
 
-  transition: width 0.15s linear, transform 0.15s linear;
+  transition: width 0.15s linear, inset-inline-start 0.15s linear,
+    background-color var(--color-transition) linear;
 }
 
 .locked {
@@ -114,7 +115,8 @@
   background-color: var(--mui-palette-secondary-main) !important;
   color: var(--mui-palette-primary-contrastText) !important;
 
-  transition: border-radius 0.1s linear !important;
+  transition: border 0.1s linear,
+    background-color var(--color-transition) linear !important;
 }
 
 .settings_text {
@@ -129,17 +131,18 @@
 
 @media screen and (max-width: 800px) {
   .navSidebar_container {
-    position: fixed;
+    position: absolute;
+    inset-inline-start: -18rem;
     z-index: 100 !important;
-    transform: translateX(-18rem);
+    /* transform: translateX(-18rem); */
   }
 
   .navSidebar_container.popup {
-    transform: translateX(0);
+    inset-inline-start: 0rem;
   }
 }
 
-@media screen and (max-height: 800px) {
+@media screen and (max-height: 500px) {
   .navLogoContainer {
     display: none;
   }

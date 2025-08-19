@@ -10,7 +10,7 @@
   justify-content: start;
   align-items: center;
 
-  background: var(--background-color);
+  background: var(--mui-palette-background-default);
 }
 
 .home_content_container {
@@ -27,8 +27,20 @@
   width: 100%;
   height: 100%;
 
-  border: 2px solid var(--secondary-color);
+  background-color: var(--mui-palette-foreground);
+
+  border: 0.125rem solid var(--mui-palette-secondary-main);
   border-radius: 25px;
+
+  overflow-x: hidden;
+  overflow-y: unset;
+}
+
+.content_container_invisible {
+  width: 100%;
+  height: 100%;
+
+  background-color: transparent;
 
   overflow-x: hidden;
   overflow-y: unset;
@@ -46,8 +58,8 @@
 .show {
   pointer-events: all;
   background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(0.125rem);
+  -webkit-backdrop-filter: blur(0.125rem);
 }
 
 .hide {
