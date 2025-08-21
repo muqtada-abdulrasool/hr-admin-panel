@@ -3,6 +3,7 @@
 import styles from "./navSidebar.module.css";
 import { useStore } from "@/utils/store";
 import FancyHR from "../fancy-hr/fancy-hr";
+import Cookie from "js-cookie";
 
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -28,6 +29,9 @@ import Gear from "@mui/icons-material/Settings";
 import Unlock from "@mui/icons-material/LockOpen";
 import Lock from "@mui/icons-material/Lock";
 import getAsset from "@/utils/asset-retriever";
+import { ConfirmPopup } from "../dialoge-popup/dialogue-popup";
+import { useRouter } from "next/navigation";
+import { useAuthContext } from "@/auth/auth-context";
 
 interface SidebarProps {
   index?: number;
@@ -36,6 +40,7 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
+  const router = useRouter();
   const Locked = useStore((state) => state.lock);
   const setLocked = useStore((state) => state.setLock);
 
@@ -43,6 +48,20 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
   const [popupable, setPopable] = useState(false);
   const { t } = useTranslation();
   const [hydrated, setHydrated] = useState(false);
+
+  const [logout, setLogout] = React.useState(false);
+  function logoutNow() {
+    console.log("Logout");
+
+    Cookie.remove("refreshToken");
+    Cookie.remove("userID");
+
+    if (window != undefined) {
+      window.location.reload();
+    }
+
+    setLogout(false);
+  }
 
   useEffect(() => {
     setHydrated(true);
@@ -71,21 +90,25 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
     }
   }, []);
 
-  const handleListItemClick = (
-    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-    index: number
-  ) => {
+  const handleListItemClick = (location: string, index: number) => {
     setSelectedIndex(index);
+    router.push(location);
   };
 
   if (!hydrated) {
     return null;
   }
 
-  console.log(getAsset("logo"));
-
   return (
     <div style={{ height: "100%" }}>
+      <ConfirmPopup
+        state={logout}
+        header="Loggin out?"
+        body="You will be required to input your credintials when trying to enter this site once again."
+        color="error"
+        handleClose={() => setLogout(false)}
+        handleConfirm={() => logoutNow()}
+      ></ConfirmPopup>
       <div
         className={`${styles.navSidebar_container} ${
           Locked ? styles.locked : ""
@@ -102,12 +125,7 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
             <ListItem disablePadding>
               <ListItemButton
                 selected={selectedIndex === 0}
-                href={
-                  process.env.NEXT_PUBLIC_SECURITY_STANDARD! +
-                  process.env.NEXT_PUBLIC_DOMAIN! +
-                  "/"
-                }
-                onClick={(event) => handleListItemClick(event, 0)}
+                onClick={(event) => handleListItemClick("/", 0)}
               >
                 <ListItemIcon>
                   <BarChart />
@@ -121,12 +139,7 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
             <ListItem disablePadding>
               <ListItemButton
                 selected={selectedIndex === 1}
-                href={
-                  process.env.NEXT_PUBLIC_SECURITY_STANDARD! +
-                  process.env.NEXT_PUBLIC_DOMAIN! +
-                  "/requests"
-                }
-                onClick={(event) => handleListItemClick(event, 1)}
+                onClick={(event) => handleListItemClick("/requests", 1)}
               >
                 <ListItemIcon>
                   <Email />
@@ -140,12 +153,7 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
             <ListItem disablePadding>
               <ListItemButton
                 selected={selectedIndex === 2}
-                href={
-                  process.env.NEXT_PUBLIC_SECURITY_STANDARD! +
-                  process.env.NEXT_PUBLIC_DOMAIN! +
-                  "/employees"
-                }
-                onClick={(event) => handleListItemClick(event, 2)}
+                onClick={(event) => handleListItemClick("/employees", 2)}
               >
                 <ListItemIcon>
                   <People />
@@ -159,12 +167,7 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
             <ListItem disablePadding>
               <ListItemButton
                 selected={selectedIndex === 3}
-                href={
-                  process.env.NEXT_PUBLIC_SECURITY_STANDARD! +
-                  process.env.NEXT_PUBLIC_DOMAIN! +
-                  "/certificates"
-                }
-                onClick={(event) => handleListItemClick(event, 3)}
+                onClick={(event) => handleListItemClick("/certificates", 3)}
               >
                 <ListItemIcon>
                   <Certificates />
@@ -178,12 +181,7 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
             <ListItem disablePadding>
               <ListItemButton
                 selected={selectedIndex === 4}
-                href={
-                  process.env.NEXT_PUBLIC_SECURITY_STANDARD! +
-                  process.env.NEXT_PUBLIC_DOMAIN! +
-                  "/roadmaps"
-                }
-                onClick={(event) => handleListItemClick(event, 4)}
+                onClick={(event) => handleListItemClick("/roadmaps", 4)}
               >
                 <ListItemIcon>
                   <Roadmaps />
@@ -200,7 +198,11 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
         <FancyHR></FancyHR>
         <div className={styles.nav_bottom_panel}>
           <div className={styles.combined_buttons}>
-            <Fab className={styles.power_button} size="small">
+            <Fab
+              className={styles.power_button}
+              size="small"
+              onClick={() => setLogout(true)}
+            >
               <Power fontSize="medium" />
             </Fab>
             <Fab

@@ -84,6 +84,20 @@ let baseTheme = createTheme({
       styleOverrides: {
         root: {
           outline: "1px solid var(--mui-palette-secondary-light)",
+          background: "var(--mui-palette-foreground)",
+        },
+      },
+    },
+    MuiTablePagination: {
+      styleOverrides: {
+        root: {
+          color: "var(--mui-palette-text-primary)",
+          "& .MuiTablePagination-selectLabel": {
+            color: "var(--mui-palette-text-primary)",
+          },
+          "& .MuiTablePagination-displayedRows": {
+            color: "var(--mui-palette-text-primary)",
+          },
         },
       },
     },
@@ -193,23 +207,24 @@ let baseTheme = createTheme({
         },
       },
     },
-    MuiTablePagination: {
-      styleOverrides: {
-        root: {
-          color: "var(--mui-palette-text-primary)",
-          "& .MuiTablePagination-selectLabel": {
-            color: "var(--mui-palette-text-primary)",
-          },
-          "& .MuiTablePagination-displayedRows": {
-            color: "var(--mui-palette-text-primary)",
-          },
-        },
-      },
-    },
     MuiAlert: {
       styleOverrides: {
         root: {
           background: "var(--mui-palette-foreground)",
+        },
+      },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        root: {
+          backdropFilter: "blur(2px)",
+        },
+      },
+    },
+    MuiCircularProgress: {
+      styleOverrides: {
+        root: {
+          color: "var(--mui-palette-primary-main)",
         },
       },
     },
@@ -267,8 +282,13 @@ let darkTheme = createTheme({
     background: {
       default: "#676767",
     },
+    error: {
+      main: "#B83B40",
+    },
+    info: {
+      main: "#0C8CE9",
+    },
     reverseText: "#000000",
-
     foreground: "#4D4D4D",
     niceRed: "#B83B40",
     niceBlue: "#0C8CE9",

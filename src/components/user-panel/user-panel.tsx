@@ -7,8 +7,15 @@ import FancyHR from "@/components/fancy-hr/fancy-hr";
 import PFP from "@/components/user-pfp/user-pfp";
 import InfoBox from "@/components/information-box/information-box";
 import SkillBox from "@/components/skill-box/skill-box";
+import { ConfirmPopup } from "../dialoge-popup/dialogue-popup";
 
 const UserPanel = () => {
+  const [del, setDel] = React.useState(false);
+  function deleteCurrentUser() {
+    console.log("User is deleted");
+    setDel(false);
+  }
+
   const info = [
     ["NAME", "Muqtada Abdulrasool"],
     ["EMAIL", "Muqtada@gmail.com"],
@@ -19,6 +26,15 @@ const UserPanel = () => {
 
   return (
     <div className={styles.user_panel}>
+      <ConfirmPopup
+        state={del}
+        header="Confirm"
+        body="Are you sure you want to delete this user? This action cannot be reverted."
+        color="error"
+        handleClose={() => setDel(false)}
+        handleConfirm={() => deleteCurrentUser()}
+      ></ConfirmPopup>
+
       <div className={styles.user_scroll_panel}>
         <PFP roundness="10%" size="12rem" image="/images/User.png"></PFP>
         <FancyHR></FancyHR>
@@ -49,6 +65,7 @@ const UserPanel = () => {
           <Button
             variant="contained"
             color="error"
+            onClick={() => setDel(true)}
             sx={{
               height: "2rem",
               width: "30%",

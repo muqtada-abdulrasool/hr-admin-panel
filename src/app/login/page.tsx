@@ -8,85 +8,25 @@ import Button from "@mui/material/Button";
 import FancyHR from "../../components/fancy-hr/fancy-hr";
 import styles from "./login.module.css";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Checkpassword } from "@/utils/password-checker";
 import { Alert } from "@mui/material";
 import getAsset from "@/utils/asset-retriever";
-
-interface RequestBody {
-  email: string;
-  password: string;
-  deviceID: string;
-}
+import { login } from "@/auth/devices/login-device";
+import { useRouter } from "next/navigation";
+import { useAuthContext } from "@/auth/auth-context";
 
 export default function Login() {
+  const router = useRouter();
   const [accountName, setAccountName] = useState("");
   const [password, setPassword] = useState("");
   const [passError, setPassError] = useState(false);
   const [passErrorText, setPassErrorText] = useState([""]);
-  const [deviceID, setDeviceID] = React.useState("");
+  const [deviceID, setDeviceID] = React.useState("string");
+  const [loading, setLoading] = React.useState(false);
   const { t } = useTranslation();
-
-  // React.useEffect(() => {
-  //   setDeviceID(getOrSetDeviceIdentifier());
-  // }, []);
-
-  // function getOrSetDeviceIdentifier() {
-  //   let tmpDeviceIdentifier = Cookies.get("deviceIdentifier");
-  //   let deviceIdentifier: string;
-
-  //   if (typeof tmpDeviceIdentifier !== undefined) {
-  //     deviceIdentifier = tmpDeviceIdentifier!;
-  //   } else {
-  //     deviceIdentifier = generateUUID();
-  //     Cookies.set("deviceIdentifier", deviceIdentifier, {
-  //       expires: 365,
-  //       sameSite: "strict",
-  //     });
-  //   }
-
-  //   return deviceIdentifier;
-  // }
-
-  async function fetchDataFromSwaggerAPI(name: string, pass: string) {
-    console.log("meow");
-    try {
-      const Data: RequestBody = {
-        email: name,
-        password: pass,
-        deviceID: deviceID,
-      };
-
-      const testData: RequestBody = {
-        email: "thedarksoul622@gmail.com",
-        password: "$TR!NG12345",
-        deviceID: "string",
-      };
-
-      let response = await fetch(
-        "http://" + process.env.NEXT_PUBLIC_PUBLIC_API_URL + "/api/Auth",
-        {
-          method: "POST",
-          body: JSON.stringify(testData),
-          headers: {
-            "content-type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      } else {
-        const JSONBody = await response.json();
-        Cookies.set("userID", JSONBody.data.userID, {});
-        Cookies.set("refreshToken", JSONBody.data.refreshToken, {});
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  }
 
   function updatePassword(
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -101,9 +41,26 @@ export default function Login() {
     }
   }
 
-  const formSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const formSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    fetchDataFromSwaggerAPI(accountName, password);
+    // const result = await login(accountName, password, deviceID, setLoading);
+    const result = await login(
+      "test@example.com",
+      "jhasdjjHU#33232#",
+      "string",
+      setLoading
+    );
+
+    if (result.statusCode == 200) {
+      if (typeof window != "undefined") {
+        window.location.reload();
+      }
+    } else {
+      setPassError(true);
+      setPassErrorText(["Code:" + result.statusCode, result.errorMessage]);
+      console.log(result.statusCode);
+      console.log(result.errorMessage);
+    }
   };
   return (
     <div className={styles.login_page_container}>
@@ -129,7 +86,7 @@ export default function Login() {
             <Input
               label={t("login.logininputlabel1")}
               variant="outlined"
-              required
+              // required
               onChange={(e) => setAccountName(e.target.value)}
             ></Input>
             <Input
@@ -137,7 +94,7 @@ export default function Login() {
               type="password"
               variant="outlined"
               onChange={(e) => updatePassword(e)}
-              required
+              // required
             ></Input>
             {passError ? (
               <Alert severity="error">
@@ -157,6 +114,7 @@ export default function Login() {
               variant="contained"
               size="large"
               color="primary"
+              loading={loading}
               disabled={passError}
               sx={{ height: "3.5rem", fontSize: "2rem", fontWeight: "800" }}
             >

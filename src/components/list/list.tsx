@@ -1,8 +1,10 @@
 "use client";
 
 import * as React from "react";
+import styles from "./list.module.css";
+import FancyHR from "../fancy-hr/fancy-hr";
 import {
-  Button,
+  TextField,
   FormControl,
   FormControlLabel,
   MenuItem,
@@ -17,153 +19,138 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import Input from "@mui/material/TextField";
-import Link from "next/link";
-
-import styles from "./list.module.css";
-import FancyHR from "../fancy-hr/fancy-hr";
 
 interface ListProps {
-  title?: string;
-  search?: boolean;
-  dense?: boolean;
-  autoDense?: boolean;
-  denseButton?: boolean;
-  func?: React.ReactNode[];
   columns: string[];
   rows: any[][];
+  total: number;
+  funcComponents?: React.ReactNode[];
+  listTitle?: string;
+  searchBox?: boolean;
+  denseButton?: boolean;
+  denseFromStart?: boolean;
   pagination?: number[];
-  count?: number;
-  color?: string;
-  onclick?: (row: any, key: number) => void;
+  page?: number;
+  setURLSelected?: any;
+  URLPagination?: number;
+  setURLPagination?: any;
+  URLPage?: number;
+  setURLPage?: any;
+  URLSearch?: any;
+  setURLSearch?: any;
+  setURLSearchAttribute?: any;
+  onClick?: () => void;
+  onDoubleClick?: () => void;
 }
 
 const list: React.FC<ListProps> = ({
-  title = "",
-  search = false,
-  dense = false,
-  autoDense = false,
-  denseButton = false,
-  func = [],
   columns,
   rows,
-  color = "var(--mui-palette-foreground)",
+  total,
+  funcComponents = [],
+  listTitle = "",
+  searchBox = false,
+  denseButton = false,
+  denseFromStart = false,
   pagination = [10, 25, 50],
-  onclick = (r: any, k: number) => {
-    r.preventDefault();
-  },
+  setURLSelected,
+  URLPagination,
+  setURLPagination,
+  URLPage,
+  setURLPage,
+  URLSearch,
+  setURLSearch,
+  setURLSearchAttribute,
+  onClick,
+  onDoubleClick,
 }) => {
-  const [searchText, setSearchText] = React.useState("");
+  const [searchText, setSearchText] = React.useState([""]);
   const [searchAttribute, setSearchAttribute] = React.useState(0);
 
-  const [density, setDensity] = React.useState(dense);
-  const [denseOption, setDenseOption] = React.useState(denseButton);
-  const [tableSize, setTableSize] = React.useState<"small" | "medium">(
-    "medium"
-  );
-  let maxDenseSize = 700;
-  let maxDenseContainer = 500;
+  const [currentPage, setCurrentPage] = React.useState(URLPage);
+  const [rowsPerPage, setRowsPerPage] = React.useState(URLPagination);
+  const [selectedRow, setSelectedRow] = React.useState(-1);
 
-  const [currentPage, setCurrentPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(pagination[0]);
+  const [density, setDensity] = React.useState(denseFromStart);
+  const [denseOption, setDenseOption] = React.useState(denseButton);
 
   const handleSearch = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setSearchText(event.target.value);
+    const TMP = [...URLSearch];
+    TMP[searchAttribute] = event.target.value;
+
+    // No need when we use URLS
+    // setSearchText(TMP);
+    setURLSearch(TMP);
   };
 
   const handleSearchAttribute = (event: any, child: any) => {
+    // TODO: This needs server to not return error when inputting weird searches
+    // const TMP = [...URLSearch];
+    // TMP[searchAttribute] = event.target.value;
+    // setURLSearch(
+    //   TMP.map((value) => {
+    //     return "";
+    //   })
+    // );
+    // setURLSearch(TMP);
+
     setSearchAttribute(child.props["data-index"]);
+    setURLSearchAttribute(child.props["data-index"]);
   };
 
-  const handleRowHref = (rowIndex: number) => {
-    if (typeof window !== "undefined") {
-      return window.location.href + "/" + rowIndex.toString();
-    } else if (typeof process.env !== undefined) {
-      return (
-        process.env.NEXT_PUBLIC_SECURITY_STANDARD! +
-        process.env.NEXT_PUBLIC_DOMAIN! +
-        "/" +
-        rowIndex.toString()
-      );
-    } else {
-      return "/";
-    }
+  const handleRowClick = (index: number) => {
+    setSelectedRow(index);
+    setURLSelected(index);
   };
 
-  const handleHrefClick = (
-    row: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-  ) => {
-    if (!(row.ctrlKey || row.metaKey)) {
-      row.preventDefault();
-    }
+  const handleRowDoubleClick = (index: number) => {
+    console.log("click?");
+    if (onDoubleClick) onDoubleClick();
   };
-
-  React.useEffect(() => {
-    if (density) {
-      setTableSize("small");
-    } else {
-      setTableSize("medium");
-    }
-  }, [density]);
-
-  React.useEffect(() => {
-    const handleResize = () => {
-      if (typeof window !== "undefined" && autoDense) {
-        if (window.innerHeight < maxDenseSize && !density) {
-          setDensity(true);
-        } else {
-          setDensity(false);
-        }
-
-        if (window.innerWidth < maxDenseContainer) {
-          setDenseOption(false);
-        } else {
-          setDenseOption(true);
-        }
-      }
-    };
-
-    if (typeof window !== "undefined" && autoDense) {
-      window.addEventListener("resize", handleResize);
-    }
-    handleResize();
-  }, []);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setCurrentPage(newPage);
+    setURLPage(newPage);
+    setSelectedRow(-1);
+    setURLSelected(-1);
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setRowsPerPage(+event.target.value);
-    setCurrentPage(0);
+    setURLPagination(+event.target.value);
   };
 
   return (
-    <div className={styles.list_container} style={{ background: color }}>
-      {title == "" && search == false && func.length < 1 ? null : (
-        <div
-          className={styles.list_header_container}
-          style={{ background: color }}
-        >
+    <div className={styles.list_container}>
+      {listTitle == "" &&
+      searchBox == false &&
+      funcComponents.length < 1 ? null : (
+        <div className={styles.list_header_container}>
           <div className={styles.list_header_left_side}>
             {/* Rendering the title*/}
             <div className={styles.list_title}>
-              {title == "" ? null : (
-                <Typography variant="h4">{title}</Typography>
+              {listTitle == "" ? null : (
+                <div
+                  style={{ display: "flex", flexDirection: "row", gap: "1rem" }}
+                >
+                  <Typography variant="h4">{listTitle}</Typography>
+                </div>
               )}
-              <FancyHR vertical ballsize="0px" length="80%" thickness="1px" />
+              {listTitle == "" || searchBox == false ? null : (
+                <FancyHR vertical ballsize="0px" length="80%" thickness="1px" />
+              )}
             </div>
-            {search ? (
+            {searchBox ? (
               /* Rendering the search box*/
               <div className={styles.search_component}>
-                <Input
+                <TextField
                   label="Search"
                   variant="outlined"
-                  onChange={(e) => handleSearch(e)}
+                  onChange={(event) => handleSearch(event)}
                   sx={{
                     "& fieldset": {
                       borderInlineEnd: "none",
@@ -171,7 +158,7 @@ const list: React.FC<ListProps> = ({
                       borderEndEndRadius: 0,
                     },
                   }}
-                ></Input>
+                ></TextField>
                 {/* Rendering the attribute box*/}
                 <FormControl>
                   <Select
@@ -200,7 +187,7 @@ const list: React.FC<ListProps> = ({
           </div>
           {/* Rendering all custom components for actions*/}
           <div className={styles.list_header_right_side}>
-            {func?.map((component, index) => (
+            {funcComponents?.map((component, index) => (
               <div key={index}>{component}</div>
             ))}
           </div>
@@ -211,23 +198,28 @@ const list: React.FC<ListProps> = ({
         className={styles.scrollableContainer}
         sx={{ tableLayout: "fixed" }}
       >
-        <Table stickyHeader aria-label="sticky table" size={tableSize}>
+        <Table
+          stickyHeader
+          aria-label="sticky table"
+          size={density ? "small" : "medium"}
+        >
           {/* Rendering the header columns*/}
           <TableHead
             sx={{
-              // boxShadow: "0px 6px 10px rgba(0, 0, 0, 0.1)",
               position: "sticky",
-              top: 0,
               outline: "2px solid var(--mui-palette-secondary-light)",
+              zIndex: 1,
             }}
           >
-            <TableRow>
-              {columns.map((columnName, index) => (
+            <TableRow sx={{ position: "sticky", zIndex: 1 }}>
+              {columns.map((cell, index) => (
                 <TableCell
                   key={index}
                   align="left"
-                  sx={{ maxWidth: "1rem" }}
-                  style={{ backgroundColor: color }}
+                  sx={{
+                    maxWidth: "1rem",
+                    background: "var(--mui-palette-foreground)",
+                  }}
                 >
                   <Typography
                     sx={{
@@ -236,11 +228,9 @@ const list: React.FC<ListProps> = ({
                       textOverflow: "ellipsis",
                       whiteSpace: "nowrap",
                       width: "100%",
-                      fontWeight: "500",
-                      fontSize: "1.2rem",
                     }}
                   >
-                    {columnName}
+                    {cell}
                   </Typography>
                 </TableCell>
               ))}
@@ -248,37 +238,29 @@ const list: React.FC<ListProps> = ({
           </TableHead>
           {/* Rendering the rows*/}
           <TableBody>
-            {rows
-              .filter((row) =>
-                row[searchAttribute]
-                  .toString()
-                  .toLowerCase()
-                  .includes(searchText.toLowerCase())
-              )
-              .slice(
-                currentPage * rowsPerPage,
-                currentPage * rowsPerPage + rowsPerPage
-              )
-              .map((row, rowIndex) => (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  tabIndex={-1}
-                  key={rowIndex}
-                  component={Link}
-                  href={handleRowHref(rowIndex)}
-                  onClick={(event) => handleHrefClick(event)}
-                  onDoubleClick={(event) => onclick(event, rowIndex)}
-                  sx={{
-                    textDecoration: "none",
-                  }}
-                >
-                  {row.map((cell, cellIndex) => (
-                    <TableCell
-                      key={cellIndex}
-                      align="left"
-                      sx={{ maxWidth: "1rem" }}
-                    >
+            {rows.map((row, rowIndex) => (
+              <TableRow
+                hover
+                role="checkbox"
+                tabIndex={-1}
+                selected={rowIndex == selectedRow ? true : false}
+                key={rowIndex}
+                onClick={() => handleRowClick(rowIndex)}
+                onDoubleClick={(event) => handleRowDoubleClick(rowIndex)}
+                sx={{
+                  textDecoration: "none",
+                  pointerEvents: "visible",
+                }}
+              >
+                {row.map((cell, cellIndex) => (
+                  <TableCell
+                    key={cellIndex}
+                    align="left"
+                    sx={{ maxWidth: "1rem" }}
+                  >
+                    {React.isValidElement(cell) ? (
+                      cell
+                    ) : (
                       <Typography
                         sx={{
                           display: "inline-block",
@@ -290,10 +272,11 @@ const list: React.FC<ListProps> = ({
                       >
                         {cell}
                       </Typography>
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
+                    )}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -312,9 +295,9 @@ const list: React.FC<ListProps> = ({
         <TablePagination
           rowsPerPageOptions={pagination}
           component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={currentPage}
+          count={total}
+          rowsPerPage={rowsPerPage!}
+          page={currentPage!}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           sx={{ borderTop: "none", overflow: "hidden" }}

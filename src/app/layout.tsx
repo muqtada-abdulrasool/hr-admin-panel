@@ -6,7 +6,7 @@ import styles from "./home.module.css";
 import { lightTheme, darkTheme } from "@/theme";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeContextProvider } from "@/utils/theme-context";
-import { AuthProvider } from "@/utils/auth-context";
+import { AuthProvider } from "@/auth/auth-context";
 import { I18nextProvider } from "react-i18next";
 import DirectionProvider from "@/utils/direction-provider";
 import i18n from "@/utils/i18n";
@@ -19,7 +19,6 @@ export default function RootLayout({
   if (typeof window !== "undefined" && window.localStorage) {
     localStorage.getItem("language");
   }
-
   return (
     <html lang="en" dir={"ltr"}>
       <head>
