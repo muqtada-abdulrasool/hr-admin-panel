@@ -8,12 +8,21 @@ import PFP from "@/components/user-pfp/user-pfp";
 import InfoBox from "@/components/information-box/information-box";
 import SkillBox from "@/components/skill-box/skill-box";
 import { ConfirmPopup } from "../dialoge-popup/dialogue-popup";
+import EmployeeForm from "@/components/fill-in-forms/employee-form";
 
 const UserPanel = () => {
   const [del, setDel] = React.useState(false);
   function deleteCurrentUser() {
     console.log("User is deleted");
     setDel(false);
+  }
+
+  const [newEmp, setNewEmp] = React.useState(false);
+  function handleClose() {
+    setNewEmp(false);
+  }
+  function handleConfirm() {
+    setNewEmp(false);
   }
 
   const info = [
@@ -35,6 +44,12 @@ const UserPanel = () => {
         handleConfirm={() => deleteCurrentUser()}
       ></ConfirmPopup>
 
+      <EmployeeForm
+        state={newEmp}
+        handleClose={handleClose}
+        handleConfirm={handleConfirm}
+      ></EmployeeForm>
+
       <div className={styles.user_scroll_panel}>
         <PFP roundness="10%" size="12rem" image="/images/User.png"></PFP>
         <FancyHR></FancyHR>
@@ -49,6 +64,7 @@ const UserPanel = () => {
         >
           <Button
             variant="contained"
+            onClick={() => setNewEmp(true)}
             sx={{
               height: "2rem",
               width: "70%",

@@ -1,0 +1,33 @@
+.main_container {
+  height: 80%;
+  width: 80%;
+}
+
+.scroll_container {
+  max-height: 30rem;
+
+  padding: 1rem;
+
+  box-sizing: border-box;
+  direction: ltr;
+
+  overflow-y: scroll;
+}
+
+.horizontal {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  direction: ltr;
+}
+
+.vertical {
+  width: 100%;
+  direction: ltr;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 2rem;
+}

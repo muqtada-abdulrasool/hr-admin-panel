@@ -32,13 +32,19 @@ export function ConfirmPopup({
         <DialogContentText>{body}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color={color} variant="contained">
+        <Button
+          onClick={handleClose}
+          color={color}
+          variant="contained"
+          sx={{ color: "var(--mui-palette-primary-contrastText)" }}
+        >
           CANCEL
         </Button>
         <Button
           onClick={handleConfirm}
           color={color}
           variant="contained"
+          sx={{ color: "var(--mui-palette-primary-contrastText)" }}
           autoFocus
         >
           CONFIRM

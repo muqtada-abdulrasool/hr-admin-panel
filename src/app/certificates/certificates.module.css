@@ -4,28 +4,19 @@
 
   box-sizing: border-box;
 
-  padding: 1rem;
-
-  border-radius: 25px;
-
-  overflow-x: hidden;
-  overflow-y: hidden;
-
   display: flex;
   flex-direction: row;
   gap: 2rem;
-
-  /* background: var(--mui-palette-foreground); */
 }
 
-.lists_container {
+.list_container {
   width: 100%;
   height: 100%;
 
-  background: var(--mui-palette-foreground);
+  box-sizing: border-box;
 
   border: 0.125rem solid var(--mui-palette-secondary-main);
   border-radius: 25px;
 
-  overflow: hidden;
+  background-color: var(--mui-palette-foreground);
 }
