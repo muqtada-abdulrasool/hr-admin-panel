@@ -75,7 +75,7 @@ export default function Home() {
           total={exampleRows.length}
           pagination={[2, 4, 10]}
           setURLSelected={setSelected}
-          funcComponents={[
+          rightFuncComponents={[
             <Fab color="primary" onClick={() => setNewCer(true)}>
               <Add />
             </Fab>,

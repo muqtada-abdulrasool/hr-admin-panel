@@ -74,7 +74,7 @@ export default function Home() {
               router.push("/employees/" + selected);
               // setLoading(true);
             }}
-            funcComponents={[
+            rightFuncComponents={[
               <Fab color="primary" onClick={() => setNewEmp(true)}>
                 <Add />
               </Fab>,

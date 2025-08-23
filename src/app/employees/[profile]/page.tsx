@@ -34,26 +34,22 @@ export default function Profile() {
             <List
               columns={[
                 "Name",
-                "Date of Acquisition",
+                "Date of Acquasition",
                 "Date of Expiration",
-                "Skill",
+                "Skills",
                 "Points to Skill",
               ]}
               rows={examplerows}
+              total={examplerows.length}
               denseButton={false}
-              dense={true}
-              autoDense={false}
               pagination={[25, 50, 100]}
-              color="var(--mui-palette-foreground)"
             ></List>,
             <List
               columns={["Title", "Description", "Sender", "Type", "Status"]}
               rows={examplerows2}
+              total={examplerows2.length}
               denseButton={false}
-              dense={true}
-              autoDense={false}
               pagination={[25, 50, 100]}
-              color="var(--mui-palette-foreground)"
             ></List>,
             <List
               columns={[
@@ -64,11 +60,9 @@ export default function Profile() {
                 "Estimated Completion Time",
               ]}
               rows={examplerows3}
+              total={examplerows3.length}
               denseButton={false}
-              dense={true}
-              autoDense={false}
               pagination={[25, 50, 100]}
-              color="var(--mui-palette-foreground)"
             ></List>,
           ]}
         ></TabsContainer>

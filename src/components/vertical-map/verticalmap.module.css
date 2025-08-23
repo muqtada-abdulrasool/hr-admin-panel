@@ -1,4 +1,4 @@
-.user_panel_container {
+.map_panel_container {
   height: 100%;
   width: 0;
   min-width: 0rem;
@@ -12,37 +12,36 @@
     min-width: 0rem;
   }
   to {
-    width: 30%;
-    min-width: 22rem;
+    width: 32rem;
+    min-width: 32rem;
   }
 }
 
-.user_panel {
+.map_container {
   height: 100%;
   width: 100%;
-  min-width: 22rem;
+
+  padding: 0.5rem 0rem;
 
   box-sizing: border-box;
 
   background: var(--mui-palette-foreground);
 
+  overflow-y: hidden;
+
   border: 0.125rem solid var(--mui-palette-secondary-main);
   border-radius: 25px;
-
-  overflow-y: hidden;
 }
 
-.user_scroll_panel {
-  width: 100%;
+.scroll_container {
   height: 100%;
-  padding: 1rem 2rem;
+  width: 100%;
 
   box-sizing: border-box;
 
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  justify-content: baseline;
 
-  overflow-y: scroll;
+  overflow-y: auto;
 }

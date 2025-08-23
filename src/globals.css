@@ -24,6 +24,7 @@
   --global-padding: 2rem;
 
   --color-transition: 0.15s;
+  --panel-transition: 0.1s;
 
   height: 100%;
   min-height: 100vh;

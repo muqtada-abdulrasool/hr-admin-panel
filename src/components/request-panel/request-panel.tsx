@@ -3,7 +3,6 @@ import styles from "./requestpanel.module.css";
 import { Button, Typography } from "@mui/material";
 import { ConfirmPopup } from "../dialoge-popup/dialogue-popup";
 import FancyHR from "../fancy-hr/fancy-hr";
-import { Attachment } from "@mui/icons-material";
 import AttachmentBox from "../attachment-box/attachment-box";
 
 interface RequestPanelProps {
@@ -35,101 +34,101 @@ const RequestPanel: React.FC<RequestPanelProps> = ({
   }
 
   return (
-    <div className={styles.request_panel}>
-      <ConfirmPopup
-        state={showAccept}
-        header="Confirm Acceptance"
-        body="Are you sure you want to accept this request?"
-        color="success"
-        handleClose={() => setShowAccept(false)}
-        handleConfirm={handleAcceptRequest}
-      />
-      <ConfirmPopup
-        state={showDeny}
-        header="Confirm Denial"
-        body="Are you sure you want to deny this request?"
-        color="error"
-        handleClose={() => setShowDeny(false)}
-        handleConfirm={handleDenyRequest}
-      />
+    <div className={styles.request_panel_container}>
+      <div className={styles.request_panel}>
+        <ConfirmPopup
+          state={showAccept}
+          header="Confirm Acceptance"
+          body="Are you sure you want to accept this request?"
+          color="success"
+          handleClose={() => setShowAccept(false)}
+          handleConfirm={handleAcceptRequest}
+        />
+        <ConfirmPopup
+          state={showDeny}
+          header="Confirm Denial"
+          body="Are you sure you want to deny this request?"
+          color="error"
+          handleClose={() => setShowDeny(false)}
+          handleConfirm={handleDenyRequest}
+        />
 
-      <div className={styles.request_scroll_panel}>
-        <div className={styles.top_section}>
-          <Typography variant="h5">{requestTitle}</Typography>
+        <div className={styles.request_scroll_panel}>
+          <div className={styles.top_section}>
+            <Typography variant="h5">{requestTitle}</Typography>
 
-          <FancyHR />
+            <FancyHR />
 
-          <AttachmentBox
-            clickable={false}
-            fullWidth
-            imgSrc={requestAttachment}
-          />
+            <AttachmentBox
+              clickable={false}
+              fullWidth
+              imgSrc={requestAttachment}
+            />
 
-          <div className={styles.info_container}>
-            <Typography variant="h6">By {requestSender}</Typography>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <Typography variant="h6">Details:</Typography>
-              <Typography variant="body1">{requestDetails}</Typography>
+            <div className={styles.info_container}>
+              <Typography variant="h6">By {requestSender}</Typography>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <Typography variant="h6">Details:</Typography>
+                <div className={styles.details_container}>
+                  <Typography variant="body1">{requestDetails}</Typography>
+                </div>
+              </div>
+              <div></div>
             </div>
-            <div></div>
           </div>
-        </div>
 
-        <div className={styles.bottom_section}>
-          <Button variant="outlined">
-            <Typography variant="subtitle1" color="primary">
-              View Sender Profile
-            </Typography>
-          </Button>
-          <Button variant="outlined">
-            <Typography variant="subtitle1" color="primary">
-              View Roadmap
-            </Typography>
-          </Button>
+          <div className={styles.bottom_section}>
+            <Button variant="contained">
+              <Typography variant="subtitle1">View Sender Profile</Typography>
+            </Button>
+            <Button variant="contained">
+              <Typography variant="subtitle1">View Roadmap</Typography>
+            </Button>
 
-          {/* Accept/Deny Buttons */}
-          <div className={styles.action_buttons_container}>
-            {/* Accept Button */}
-            <Button
-              variant="contained"
-              color="success"
-              onClick={() => setShowAccept(true)}
-              sx={{
-                height: "2rem",
-                width: "50%",
-                borderEndStartRadius: "15px",
-              }}
-            >
-              <Typography
-                variant="subtitle1"
-                color="var(--mui-palette-primary-contrastText)"
+            {/* Accept/Deny Buttons */}
+            <div className={styles.action_buttons_container}>
+              {/* Accept Button */}
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => setShowAccept(true)}
+                sx={{
+                  height: "2rem",
+                  width: "50%",
+                  borderEndStartRadius: "15px",
+                }}
               >
-                Accept
-              </Typography>
-            </Button>
-            {/* Deny Button */}
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => setShowDeny(true)}
-              sx={{
-                height: "2rem",
-                width: "50%",
-                borderEndEndRadius: "15px",
-              }}
-            >
-              <Typography
-                variant="subtitle1"
-                color="var(--mui-palette-primary-contrastText)"
+                <Typography
+                  variant="subtitle1"
+                  color="var(--mui-palette-primary-contrastText)"
+                >
+                  Accept
+                </Typography>
+              </Button>
+              {/* Deny Button */}
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => setShowDeny(true)}
+                sx={{
+                  height: "2rem",
+                  width: "50%",
+                  borderEndEndRadius: "15px",
+                }}
               >
-                Deny
-              </Typography>
-            </Button>
+                <Typography
+                  variant="subtitle1"
+                  color="var(--mui-palette-primary-contrastText)"
+                >
+                  Deny
+                </Typography>
+              </Button>
+            </div>
           </div>
         </div>
       </div>

@@ -24,7 +24,8 @@ interface ListProps {
   columns: string[];
   rows: any[][];
   total: number;
-  funcComponents?: React.ReactNode[];
+  rightFuncComponents?: React.ReactNode[];
+  leftFuncComponents?: React.ReactNode[];
   listTitle?: string;
   searchBox?: boolean;
   denseButton?: boolean;
@@ -47,7 +48,8 @@ const list: React.FC<ListProps> = ({
   columns,
   rows,
   total,
-  funcComponents = [],
+  leftFuncComponents = [],
+  rightFuncComponents = [],
   listTitle = "",
   searchBox = false,
   denseButton = false,
@@ -128,7 +130,8 @@ const list: React.FC<ListProps> = ({
     <div className={styles.list_container}>
       {listTitle == "" &&
       searchBox == false &&
-      funcComponents.length < 1 ? null : (
+      rightFuncComponents.length < 1 &&
+      leftFuncComponents.length < 1 ? null : (
         <div className={styles.list_header_container}>
           <div className={styles.list_header_left_side}>
             {/* Rendering the title*/}
@@ -184,12 +187,19 @@ const list: React.FC<ListProps> = ({
                 </FormControl>
               </div>
             ) : null}
+            {leftFuncComponents.length < 1
+              ? null
+              : leftFuncComponents?.map((component, index) => (
+                  <div key={index}>{component}</div>
+                ))}
           </div>
           {/* Rendering all custom components for actions*/}
           <div className={styles.list_header_right_side}>
-            {funcComponents?.map((component, index) => (
-              <div key={index}>{component}</div>
-            ))}
+            {rightFuncComponents.length < 1
+              ? null
+              : rightFuncComponents?.map((component, index) => (
+                  <div key={index}>{component}</div>
+                ))}
           </div>
         </div>
       )}

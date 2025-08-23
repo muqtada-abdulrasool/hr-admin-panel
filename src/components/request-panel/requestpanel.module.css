@@ -1,6 +1,25 @@
+.request_panel_container {
+  height: 100%;
+  width: 0;
+  min-width: 0rem;
+  animation: slideInWidth var(--panel-transition) linear forwards;
+  overflow: hidden;
+}
+
+@keyframes slideInWidth {
+  from {
+    width: 0;
+    min-width: 0rem;
+  }
+  to {
+    width: 30%;
+    min-width: 22rem;
+  }
+}
+
 .request_panel {
   height: 100%;
-  width: 30%;
+  width: 100%;
   min-width: 22rem;
 
   display: flex;
@@ -52,6 +71,11 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.details_container {
+  max-height: 10rem;
+  overflow-y: scroll;
 }
 
 .action_buttons_container {

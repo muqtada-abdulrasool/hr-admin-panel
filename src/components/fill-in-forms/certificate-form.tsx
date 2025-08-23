@@ -8,6 +8,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import AttachmentBox from "../attachment-box/attachment-box";
+import { Autocomplete } from "@mui/material";
+import { exampleCertifications } from "@/utils/example-data";
 
 interface FillInProps {
   state: boolean;
@@ -63,25 +65,22 @@ export default function CertificateForm({
               />
             </div>
             <div className={styles.horizontal}>
-              <TextField
-                label="Skills Involved (Separate by Comma)"
+              <Autocomplete
+                multiple
+                options={exampleCertifications}
+                getOptionLabel={(option) => option.title}
                 fullWidth
-                variant="filled"
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="filled"
+                    label="Multiple values"
+                    placeholder="Favorites"
+                  />
+                )}
               />
               <TextField
                 label="Points to Skills (Separate by Comma)"
-                fullWidth
-                variant="filled"
-              />
-            </div>
-            <div className={styles.horizontal}>
-              <TextField
-                label="المهارات المطلوبة (مفصولة بفاصلة)"
-                fullWidth
-                variant="filled"
-              />
-              <TextField
-                label="نقاط المهارات (مفصولة بفاصلة)"
                 fullWidth
                 variant="filled"
               />

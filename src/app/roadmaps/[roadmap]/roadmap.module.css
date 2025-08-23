@@ -1,0 +1,23 @@
+.roadmap_container {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.employees_container {
+  height: 100%;
+  width: 100%;
+  min-width: 22rem;
+
+  box-sizing: border-box;
+
+  background: var(--mui-palette-foreground);
+
+  border: 0.125rem solid var(--mui-palette-secondary-main);
+  border-radius: 25px;
+
+  overflow-y: hidden;
+}

@@ -53,7 +53,7 @@ export default function Home() {
           total={exampleRows.length}
           pagination={[2, 4, 10]}
           setURLSelected={setSelected}
-          funcComponents={[
+          leftFuncComponents={[
             <FormControl size="medium">
               <InputLabel>Filter Type</InputLabel>
               <Select
