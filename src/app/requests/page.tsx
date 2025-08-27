@@ -12,6 +12,7 @@ import Throbber from "@/components/throbber/throbber";
 import { exampleRequests } from "@/utils/example-data";
 import RequestPanel from "@/components/request-panel/request-panel";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import Capsule from "@/components/capsule/capsule";
 
 export default function Home() {
   // const router = useRouter();
@@ -41,7 +42,13 @@ export default function Home() {
   //   ]);
 
   let columns = ["Name", "Details", "Sender", "Roadmap", "Status"];
-  let exampleRows = exampleRequests;
+  let exampleRows: any[][] = exampleRequests;
+
+  for (let i = 0; i < exampleRows.length; i++) {
+    exampleRows[i][4] = (
+      <Capsule color="success-main" text="Declined"></Capsule>
+    );
+  }
 
   const content = (
     <div className={styles.content_container}>
@@ -54,7 +61,7 @@ export default function Home() {
           pagination={[2, 4, 10]}
           setURLSelected={setSelected}
           leftFuncComponents={[
-            <FormControl size="medium">
+            <FormControl size="medium" sx={{ width: "6rem" }}>
               <InputLabel>Filter Type</InputLabel>
               <Select
                 value={"all"}

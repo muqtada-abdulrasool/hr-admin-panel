@@ -11,9 +11,10 @@ import React, {
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
 
-interface AuthContextType {
+export interface AuthContextType {
   jwt: string | null;
   fetchNewJwt: () => Promise<string | null>;
+  removeJwt: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,7 +24,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [jwt, setJwt] = useState(null);
+  const [jwt, setJwt] = useState<string | null>(null);
   const router = useRouter();
   const path = usePathname();
 
@@ -52,9 +53,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       if (JSONBody.statusCode == 200) {
         setJwt(JSONBody.data);
+
         if (path == "/login") {
-          router.push("/");
+          router.push("/employees");
         }
+
         return jwt;
       } else if (JSONBody.statusCode == 401) {
         router.push("/login");
@@ -65,6 +68,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return null;
   };
 
+  const removeJwt = () => {
+    setJwt(null);
+  };
+
   useEffect(() => {
     if (!jwt) {
       fetchNewJwt();
@@ -72,7 +79,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ jwt, fetchNewJwt }}>
+    <AuthContext.Provider value={{ jwt, fetchNewJwt, removeJwt }}>
       {children}
     </AuthContext.Provider>
   );

@@ -4,6 +4,7 @@ import { Button, Typography } from "@mui/material";
 import { ConfirmPopup } from "../dialoge-popup/dialogue-popup";
 import FancyHR from "../fancy-hr/fancy-hr";
 import AttachmentBox from "../attachment-box/attachment-box";
+import Link from "next/link";
 
 interface RequestPanelProps {
   requestTitle: string;
@@ -66,7 +67,24 @@ const RequestPanel: React.FC<RequestPanelProps> = ({
             />
 
             <div className={styles.info_container}>
-              <Typography variant="h6">By {requestSender}</Typography>
+              <Typography variant="h6">
+                By{" "}
+                <Link
+                  href={"employees/1"} //TODO
+                  style={{ color: "var(--mui-palette-primary-main)" }}
+                >
+                  {requestSender}
+                </Link>
+              </Typography>
+              <Typography variant="h6">
+                From{" "}
+                <Link
+                  href={"roadmaps/1"} //TODO
+                  style={{ color: "var(--mui-palette-primary-main)" }}
+                >
+                  CCNA 2025
+                </Link>
+              </Typography>
               <div
                 style={{
                   display: "flex",
@@ -83,13 +101,6 @@ const RequestPanel: React.FC<RequestPanelProps> = ({
           </div>
 
           <div className={styles.bottom_section}>
-            <Button variant="contained">
-              <Typography variant="subtitle1">View Sender Profile</Typography>
-            </Button>
-            <Button variant="contained">
-              <Typography variant="subtitle1">View Roadmap</Typography>
-            </Button>
-
             {/* Accept/Deny Buttons */}
             <div className={styles.action_buttons_container}>
               {/* Accept Button */}
@@ -98,13 +109,13 @@ const RequestPanel: React.FC<RequestPanelProps> = ({
                 color="success"
                 onClick={() => setShowAccept(true)}
                 sx={{
-                  height: "2rem",
+                  height: "3rem",
                   width: "50%",
                   borderEndStartRadius: "15px",
                 }}
               >
                 <Typography
-                  variant="subtitle1"
+                  variant="h6"
                   color="var(--mui-palette-primary-contrastText)"
                 >
                   Accept
@@ -116,13 +127,13 @@ const RequestPanel: React.FC<RequestPanelProps> = ({
                 color="error"
                 onClick={() => setShowDeny(true)}
                 sx={{
-                  height: "2rem",
+                  height: "3rem",
                   width: "50%",
                   borderEndEndRadius: "15px",
                 }}
               >
                 <Typography
-                  variant="subtitle1"
+                  variant="h6"
                   color="var(--mui-palette-primary-contrastText)"
                 >
                   Deny

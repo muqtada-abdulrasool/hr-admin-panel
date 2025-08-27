@@ -28,6 +28,8 @@ export default function Login() {
   const [loading, setLoading] = React.useState(false);
   const { t } = useTranslation();
 
+  const auth = useAuthContext();
+
   function updatePassword(
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
@@ -52,9 +54,11 @@ export default function Login() {
     );
 
     if (result.statusCode == 200) {
-      if (typeof window != "undefined") {
-        window.location.reload();
-      }
+      // if (typeof window != "undefined") {
+      //   window.location.reload();
+      // }
+      auth.fetchNewJwt();
+      router.push("/");
     } else {
       setPassError(true);
       setPassErrorText(["Code:" + result.statusCode, result.errorMessage]);

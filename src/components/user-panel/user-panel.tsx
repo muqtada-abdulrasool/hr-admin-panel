@@ -69,7 +69,7 @@ const UserPanel = () => {
               sx={{
                 height: "2rem",
                 width: "70%",
-                borderEndStartRadius: "15px",
+                // borderEndStartRadius: "15px",
               }}
             >
               <Typography
@@ -86,7 +86,7 @@ const UserPanel = () => {
               sx={{
                 height: "2rem",
                 width: "30%",
-                borderEndEndRadius: "15px",
+                // borderEndEndRadius: "15px",
               }}
             >
               <Typography

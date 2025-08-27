@@ -274,7 +274,7 @@ export const exampleCertificates = [
   ["(ISC)2 CCSP", "2/6/2023", "2/6/2026", "Cloud Security", "60"],
 ];
 
-export const exampleRequests = [
+export let exampleRequests = [
   [
     "Senior Front-End Developer Request",
     "I would like to etc etc",

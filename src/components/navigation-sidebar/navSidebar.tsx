@@ -41,6 +41,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
   const router = useRouter();
+  const auth = useAuthContext();
   const Locked = useStore((state) => state.lock);
   const setLocked = useStore((state) => state.setLock);
 
@@ -56,9 +57,8 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
     Cookie.remove("refreshToken");
     Cookie.remove("userID");
 
-    if (window != undefined) {
-      window.location.reload();
-    }
+    router.push("/login");
+    auth.removeJwt();
 
     setLogout(false);
   }

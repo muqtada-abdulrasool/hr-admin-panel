@@ -13,15 +13,14 @@ export const getData = async (
         method: "GET",
         credentials: "include",
         headers: {
-          accept: "/",
           Authorization: `bearer ${token}`,
+          accept: "/",
         },
       });
 
-      const data = await response.json();
-
-      if (data.status === 401) {
+      if (response.status === 401) {
         const newJwt = await fetchNewJwt();
+        console.log("AHHH");
         if (newJwt) {
           return await makeRequest(newJwt);
         } else {
@@ -29,9 +28,8 @@ export const getData = async (
         }
       }
 
+      const data = await response.json();
       setData(data.data);
-    } catch (err) {
-      return err;
     } finally {
       setLoading(false);
     }

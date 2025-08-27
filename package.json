@@ -17,6 +17,7 @@
     "@mui/lab": "^7.0.0-beta.16",
     "@mui/material": "^7.2.0",
     "@mui/material-nextjs": "^7.2.0",
+    "@mui/x-charts": "^8.10.2",
     "@mui/x-data-grid": "^8.9.2",
     "@mui/x-date-pickers": "^8.10.2",
     "@types/js-cookie": "^3.0.6",

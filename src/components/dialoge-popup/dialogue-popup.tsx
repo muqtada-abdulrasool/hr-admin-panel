@@ -34,7 +34,7 @@ export function ConfirmPopup({
       <DialogActions>
         <Button
           onClick={handleClose}
-          color={color}
+          color={"secondary"}
           variant="contained"
           sx={{ color: "var(--mui-palette-primary-contrastText)" }}
         >

@@ -76,7 +76,7 @@ export default function Home() {
           setCertificate={handleCerClick}
           steps={[
             { title: "Obtain CCNA 2025", certificateId: "14212" },
-            { title: "Obtain CCNA 2025", certificateId: "14212" },
+            { title: "Obtain Your Mom", certificateId: "14212" },
             { title: "Obtain CCNA 2025", certificateId: "14212" },
             { title: "Obtain CCNA 2025", certificateId: "14212" },
             { title: "Obtain CCNA 2025", certificateId: "14212" },

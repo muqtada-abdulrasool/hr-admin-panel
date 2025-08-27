@@ -9,12 +9,14 @@ declare module "@mui/material/styles" {
     reverseText?: string;
     niceRed?: string;
     niceBlue?: string;
+    niceGreen?: string;
   }
   interface PaletteOptions {
     foreground?: string;
     reverseText?: string;
     niceRed?: string;
     niceBlue?: string;
+    niceGreen?: string;
   }
 }
 let baseTheme = createTheme({
@@ -97,6 +99,16 @@ let baseTheme = createTheme({
           },
           "& .MuiTablePagination-displayedRows": {
             color: "var(--mui-palette-text-primary)",
+          },
+        },
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          // WANT TO EDIT THE CSS OF TYOPOGRPAPHY ELEMENT OF CELL HERE
+          "& .MuiTypography-root": {
+            verticalAlign: "middle",
           },
         },
       },
@@ -257,6 +269,7 @@ let lightTheme = createTheme({
     foreground: "#ffffff",
     niceRed: "#B83B40",
     niceBlue: "#0C8CE9",
+    niceGreen: "",
   },
 });
 

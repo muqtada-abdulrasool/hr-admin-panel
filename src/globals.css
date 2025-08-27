@@ -21,7 +21,7 @@
   --nice-red: #b83b40;
   --nice-blue: #0c8ce9;
 
-  --global-padding: 2rem;
+  --global-padding: 1.5rem;
 
   --color-transition: 0.15s;
   --panel-transition: 0.1s;
@@ -32,6 +32,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.home_root_container {
+  background-color: red;
 }
 
 h1 {

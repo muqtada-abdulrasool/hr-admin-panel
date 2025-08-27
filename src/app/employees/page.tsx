@@ -2,7 +2,7 @@
 
 import styles from "./employees.module.css";
 
-import { useUserApi } from "@/auth/devices/user-device";
+import useUser from "@/auth/devices/user-device";
 import HomePage from "@/components/home-page/home-page";
 import { useEffect, useState } from "react";
 import List from "@/components/list/list";
@@ -12,15 +12,20 @@ import Throbber from "@/components/throbber/throbber";
 import { Fab } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import EmployeeForm from "@/components/fill-in-forms/employee-form";
+import { exampleEmployees } from "@/utils/example-data";
+import { useAuthContext } from "@/auth/auth-context";
 
 export default function Home() {
   const router = useRouter();
   const [pagination, setPagination] = useState(10);
   const [page, setPage] = useState(0);
   const [selected, setSelected] = useState(-1);
-
   const [searchText, setSearchText] = useState(["", "", "0", ""]);
   const [searchAttribute, setSearchAttribute] = useState(0);
+
+  const auth = useAuthContext();
+  const jwt = auth.jwt;
+  const fetchNewJwt = auth.fetchNewJwt;
 
   const [newEmp, setNewEmp] = useState(false);
   function handleClose() {
@@ -30,14 +35,16 @@ export default function Home() {
     setNewEmp(false);
   }
 
-  const { getUser, userData } = useUserApi();
+  const { loading, getUsers } = useUser(jwt, fetchNewJwt);
+  const [userData, setUserData] = useState();
 
   useEffect(() => {
-    getUser(searchText[2], page + 1, pagination, searchText[0]);
-    console.log(selected);
-  }, [getUser, pagination, page, searchText, searchAttribute]);
+    if (jwt) {
+      getUsers(searchText[2], page + 1, pagination, searchText[0], setUserData);
+    }
+  }, [jwt, pagination, page, searchText, searchAttribute]);
 
-  if (userData != undefined) {
+  if (!loading && userData) {
     let JSONBODY = JSON.parse(userData);
     let columns = ["Email", "Roles", "User ID", "Status"];
     let total = JSONBODY.total;
@@ -47,6 +54,7 @@ export default function Home() {
       user.user_id,
       user.entity_Status,
     ]);
+    // const exampleRows = exampleEmployees;
 
     const content = (
       <div className={styles.content_container}>
@@ -58,10 +66,15 @@ export default function Home() {
         <div className={styles.list_container}>
           <List
             listTitle="Test Employees Table"
-            columns={columns}
+            columns={[
+              "Name",
+              "Phone Number",
+              "Position",
+              "Date of Employement",
+            ]}
             rows={rows}
             total={total}
-            pagination={[2, 4, 10]}
+            pagination={[2, 4, 20]}
             setURLSelected={setSelected}
             URLPagination={pagination}
             setURLPagination={setPagination}
@@ -72,7 +85,6 @@ export default function Home() {
             setURLSearchAttribute={setSearchAttribute}
             onDoubleClick={() => {
               router.push("/employees/" + selected);
-              // setLoading(true);
             }}
             rightFuncComponents={[
               <Fab color="primary" onClick={() => setNewEmp(true)}>
