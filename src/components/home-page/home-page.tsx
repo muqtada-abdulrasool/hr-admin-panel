@@ -3,6 +3,7 @@ import styles from "./homepage.module.css";
 
 import Sidebar from "@/components/navigation-sidebar/navSidebar";
 import Header from "@/components/header/header";
+import SettingsForm from "../fill-in-forms/settings-form";
 
 interface HomePageProps {
   content: any;
@@ -18,8 +19,18 @@ const HomePage: React.FC<HomePageProps> = ({
   contextBoxVisibility = true,
 }) => {
   const [popup, setPopup] = useState(false);
+  const [settings, setSettings] = useState(false);
   return (
     <div className={styles.home_page_container}>
+      <SettingsForm
+        state={settings}
+        handleClose={() => {
+          setSettings(false);
+        }}
+        handleConfirm={() => {
+          setSettings(false);
+        }}
+      ></SettingsForm>
       {popup ? (
         <div
           className={`${styles.vail} ${styles.show}`}
@@ -33,9 +44,7 @@ const HomePage: React.FC<HomePageProps> = ({
       <Sidebar
         index={sideBarIndex}
         popup={popup}
-        callback={() => {
-          setPopup(false);
-        }}
+        settings={setSettings}
       ></Sidebar>
       <div className={styles.home_content_container}>
         <Header

@@ -1,0 +1,78 @@
+import * as React from "react";
+import styles from "./form.module.css";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import AttachmentBox from "../attachment-box/attachment-box";
+import { Autocomplete } from "@mui/material";
+import { exampleCertifications } from "@/utils/example-data";
+import LangButton from "../lang-button/lang-button";
+import ThemeButton from "../theme-button/theme-button";
+
+interface FillInProps {
+  state: boolean;
+  color?: "primary" | "secondary" | "success" | "error" | "info" | "warning";
+  handleClose: () => void;
+  handleConfirm: () => void;
+}
+
+export default function SettingsForm({
+  state = true,
+  handleClose = Function,
+  handleConfirm = Function,
+}: FillInProps) {
+  return (
+    <Dialog open={state} maxWidth="md" fullWidth>
+      <DialogTitle>Settings</DialogTitle>
+      <DialogContent>
+        <DialogContentText></DialogContentText>
+        <form className={styles.scroll_container}>
+          <div className={styles.vertical}>
+            <div className={styles.horizontal}>
+              <AttachmentBox />
+
+              <div className={styles.vertical}>
+                <div className={styles.horizontal}>
+                  <TextField
+                    label="Admin Name"
+                    fullWidth
+                    variant="filled"
+                    required
+                  />
+                </div>
+                <div className={styles.horizontal}>
+                  <TextField
+                    label="اسم المسؤول"
+                    fullWidth
+                    variant="filled"
+                    sx={{ direction: "rtl" }}
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              className={styles.horizontal}
+              style={{ justifyContent: "center" }}
+            >
+              <LangButton></LangButton>
+              <ThemeButton></ThemeButton>
+            </div>
+          </div>
+        </form>
+      </DialogContent>
+      <DialogActions>
+        <Button variant="contained" onClick={handleClose}>
+          Cancel
+        </Button>
+        <Button variant="contained" type="submit" onClick={handleConfirm}>
+          Submit
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}

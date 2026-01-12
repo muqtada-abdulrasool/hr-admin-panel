@@ -8,7 +8,6 @@ import Cookie from "js-cookie";
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Button,
   List,
   ListItem,
   ListItemIcon,
@@ -36,10 +35,10 @@ import { useAuthContext } from "@/auth/auth-context";
 interface SidebarProps {
   index?: number;
   popup?: boolean;
-  callback?: Function;
+  settings?: any;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
+const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, settings }) => {
   const router = useRouter();
   const auth = useAuthContext();
   const Locked = useStore((state) => state.lock);
@@ -103,8 +102,8 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
     <div style={{ height: "100%" }}>
       <ConfirmPopup
         state={logout}
-        header="Loggin out?"
-        body="You will be required to input your credintials when trying to enter this site once again."
+        header={t("popup.logoutHeader")}
+        body={t("popup.logoutBody")}
         color="error"
         handleClose={() => setLogout(false)}
         handleConfirm={() => logoutNow()}
@@ -207,6 +206,9 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
             </Fab>
             <Fab
               className={styles.settings_button}
+              onClick={() => {
+                settings(true);
+              }}
               variant="extended"
               size="medium"
             >
@@ -217,7 +219,7 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, callback }) => {
                   color: "var(--mui-palette-primary-contrastText)",
                 }}
               >
-                SETTINGS{" "}
+                {t("navbar.settings")}{" "}
               </Typography>
               <Gear fontSize="medium" />
             </Fab>

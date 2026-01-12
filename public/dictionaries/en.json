@@ -22,5 +22,53 @@
     "english" : "English",
     "arabic" : "Arabic",
     "japanese" : "Japanese"
+  },
+
+  "common" : {
+    "cancel": "CANCEL",
+    "confirm": "CONFIRM",
+    "loading": "Loading...",
+    "search": "Search",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "close": "Close"
+  },
+
+  "overview" : {
+    "requests": "REQUESTS",
+    "employees": "EMPLOYEES",
+    "certificates": "CERTIFICATES",
+    "roadmaps": "ROADMAPS",
+    "pending": "PENDING",
+    "approved": "APPROVED",
+    "declined": "DECLINED",
+    "inRoadmap": "In Roadmap",
+    "notInRoadmap": "Not in Roadmap",
+    "skills": "Skills",
+    "active": "Active",
+    "inactive": "inactive",
+    "openRequestPanel": "Open Request Panel",
+    "openEmployeesPanel": "Open Employees Panel",
+    "openCertificatesPanel": "Open Certificates Panel",
+    "openRoadmapsPanel": "Open Roadmaps Panel"
+  },
+
+  "employees" : {
+    "title": "Test Employees Table",
+    "name": "Name",
+    "phoneNumber": "Phone Number",
+    "position": "Position",
+    "dateOfEmployment": "Date of Employment",
+    "email": "Email",
+    "roles": "Roles",
+    "userId": "User ID",
+    "status": "Status"
+  },
+
+  "popup" : {
+    "logoutHeader": "Logging out?",
+    "logoutBody": "You will be required to input your credentials when trying to enter this site once again."
   }
 }

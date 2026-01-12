@@ -22,5 +22,53 @@
         "english": "الإنجليزية",
         "arabic": "العربية",
         "japanese": "اليابانية"
+    },
+
+    "common" : {
+        "cancel": "إلغاء",
+        "confirm": "تأكيد",
+        "loading": "جاري التحميل...",
+        "search": "بحث",
+        "add": "إضافة",
+        "edit": "تعديل",
+        "delete": "حذف",
+        "save": "حفظ",
+        "close": "إغلاق"
+    },
+
+    "overview" : {
+        "requests": "الطلبات",
+        "employees": "الموظفين",
+        "certificates": "الشهادات",
+        "roadmaps": "خرائط الطريق",
+        "pending": "قيد الانتظار",
+        "approved": "موافق عليه",
+        "declined": "مرفوض",
+        "inRoadmap": "في خريطة الطريق",
+        "notInRoadmap": "ليس في خريطة الطريق",
+        "skills": "المهارات",
+        "active": "نشط",
+        "inactive": "غير نشط",
+        "openRequestPanel": "فتح لوحة الطلبات",
+        "openEmployeesPanel": "فتح لوحة الموظفين",
+        "openCertificatesPanel": "فتح لوحة الشهادات",
+        "openRoadmapsPanel": "فتح لوحة خرائط الطريق"
+    },
+
+    "employees" : {
+        "title": "جدول الموظفين التجريبي",
+        "name": "الاسم",
+        "phoneNumber": "رقم الهاتف",
+        "position": "المنصب",
+        "dateOfEmployment": "تاريخ التوظيف",
+        "email": "البريد الإلكتروني",
+        "roles": "الأدوار",
+        "userId": "معرف المستخدم",
+        "status": "الحالة"
+    },
+
+    "popup" : {
+        "logoutHeader": "تسجيل الخروج؟",
+        "logoutBody": "ستحتاج إلى إدخال بيانات الاعتماد الخاصة بك عند محاولة دخول هذا الموقع مرة أخرى."
     }
 }

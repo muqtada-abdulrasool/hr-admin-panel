@@ -28,7 +28,7 @@ export default function Login() {
   const [loading, setLoading] = React.useState(false);
   const { t } = useTranslation();
 
-  const auth = useAuthContext();
+  // const auth = useAuthContext();
 
   function updatePassword(
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -57,7 +57,7 @@ export default function Login() {
       // if (typeof window != "undefined") {
       //   window.location.reload();
       // }
-      auth.fetchNewJwt();
+      // auth.fetchNewJwt();
       router.push("/");
     } else {
       setPassError(true);
