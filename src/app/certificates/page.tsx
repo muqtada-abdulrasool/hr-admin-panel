@@ -2,7 +2,7 @@
 
 import styles from "./certificates.module.css";
 
-import { useUserApi } from "@/auth/devices/user-device";
+import useUserApi from "@/auth/devices/user-device";
 import HomePage from "@/components/home-page/home-page";
 import { useEffect, useState } from "react";
 import List from "@/components/list/list";
