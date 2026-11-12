@@ -4,6 +4,14 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
+// Ensure default language is "en" when localStorage is empty or contains an invalid value
+if (typeof window !== "undefined" && window.localStorage) {
+  const storedLang = localStorage.getItem("language");
+  if (!storedLang || !["en", "ar", "jp"].includes(storedLang)) {
+    localStorage.setItem("language", "en");
+  }
+}
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -20,6 +28,8 @@ i18n
       },
     },
     fallbackLng: "en",
+    supportedLngs: ["en", "ar", "jp"],
+    load: "languageOnly",
     detection: {
       order: ["localStorage", "navigator"],
       lookupLocalStorage: "language",

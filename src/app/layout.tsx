@@ -3,7 +3,6 @@
 import "../globals.css";
 import React, { useEffect } from "react";
 import styles from "./home.module.css";
-import { lightTheme, darkTheme } from "@/theme";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeContextProvider } from "@/utils/theme-context";
 import { AuthProvider } from "@/auth/auth-context";
@@ -17,9 +16,17 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  if (typeof window !== "undefined" && window.localStorage) {
-    localStorage.getItem("language");
-  }
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      if (!localStorage.getItem("theme")) {
+        localStorage.setItem("theme", "dark");
+      }
+      if (!localStorage.getItem("language")) {
+        localStorage.setItem("language", "en");
+      }
+    }
+  }, []);
+
   return (
     <html lang="en" dir={"ltr"}>
       <head>

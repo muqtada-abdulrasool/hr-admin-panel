@@ -7,11 +7,22 @@ import {
   MenuItem,
   SelectChangeEvent,
 } from "@mui/material";
-import React, { ChangeEvent, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Select } from "@mui/material";
 
 const LangButton = () => {
   const { i18n, t } = useTranslation();
+
+  const currentLang =
+    i18n.language && ["en", "ar", "jp"].includes(i18n.language)
+      ? i18n.language
+      : "en";
+
+  useEffect(() => {
+    if (!i18n.language || !["en", "ar", "jp"].includes(i18n.language)) {
+      i18n.changeLanguage("en");
+    }
+  }, [i18n.language]);
 
   function handleLangChange(event: SelectChangeEvent) {
     if (i18n.language !== event.target.value) {
@@ -23,7 +34,7 @@ const LangButton = () => {
     <FormControl size="small">
       <InputLabel>Language</InputLabel>
       <Select
-        value={i18n.language}
+        value={currentLang}
         label="Language"
         onChange={handleLangChange}
         autoWidth

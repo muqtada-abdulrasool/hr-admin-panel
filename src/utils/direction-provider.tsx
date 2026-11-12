@@ -10,13 +10,18 @@ export default function DirectionProvider({
 }) {
   const { i18n } = useTranslation();
 
+  const currentLang =
+    i18n.language && ["en", "ar", "jp"].includes(i18n.language)
+      ? i18n.language
+      : "en";
+
   useEffect(() => {
     document.documentElement.setAttribute(
       "dir",
-      i18n.language === "ar" ? "rtl" : "ltr"
+      currentLang === "ar" ? "rtl" : "ltr"
     );
-    document.documentElement.setAttribute("lang", i18n.language);
-  }, [i18n.language]);
+    document.documentElement.setAttribute("lang", currentLang);
+  }, [currentLang]);
 
   return <>{children}</>;
 }

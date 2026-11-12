@@ -13,22 +13,25 @@ interface ThemeContextType {
 }
 
 const ThemeContext = React.createContext<ThemeContextType>({
-  theme: "light",
+  theme: "dark",
   changeTheme: () => {},
 });
 
 export const ThemeContextProvider = ({ children }: ThemeProviderProps) => {
-  const [theme, setTheme] = React.useState<"light" | "dark" | null>(null);
+  const [theme, setTheme] = React.useState<"light" | "dark">("dark");
 
   useEffect(() => {
-    let localTheme;
+    let localTheme: string | null = null;
     if (typeof window !== "undefined" && window.localStorage) {
       localTheme = localStorage.getItem("theme");
     }
     if (localTheme === "light" || localTheme === "dark") {
       setTheme(localTheme);
     } else {
-      setTheme("light"); // fallback
+      setTheme("dark"); // default dark mode when empty
+      if (typeof window !== "undefined" && window.localStorage) {
+        localStorage.setItem("theme", "dark");
+      }
     }
   }, []);
 
@@ -38,8 +41,6 @@ export const ThemeContextProvider = ({ children }: ThemeProviderProps) => {
       localStorage.setItem("theme", t);
     }
   }
-
-  if (!theme) return null; // Or a loading spinner
 
   return (
     <ThemeContext.Provider value={{ theme, changeTheme }}>
