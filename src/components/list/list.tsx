@@ -23,7 +23,7 @@ import {
 interface ListProps {
   columns: string[];
   rows: any[][];
-  total: number;
+  total?: number;
   rightFuncComponents?: React.ReactNode[];
   leftFuncComponents?: React.ReactNode[];
   listTitle?: string;
@@ -44,9 +44,9 @@ interface ListProps {
   onDoubleClick?: () => void;
 }
 
-const list: React.FC<ListProps> = ({
+const ListComponent: React.FC<ListProps> = ({
   columns,
-  rows,
+  rows = [],
   total,
   leftFuncComponents = [],
   rightFuncComponents = [],
@@ -66,65 +66,116 @@ const list: React.FC<ListProps> = ({
   onClick,
   onDoubleClick,
 }) => {
-  const [searchText, setSearchText] = React.useState([""]);
+  const [localSearchText, setLocalSearchText] = React.useState("");
   const [searchAttribute, setSearchAttribute] = React.useState(0);
 
-  const [currentPage, setCurrentPage] = React.useState(URLPage);
-  const [rowsPerPage, setRowsPerPage] = React.useState(URLPagination);
+  const [currentPage, setCurrentPage] = React.useState(URLPage ?? 0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(
+    URLPagination ?? pagination[0] ?? 10
+  );
   const [selectedRow, setSelectedRow] = React.useState(-1);
 
   const [density, setDensity] = React.useState(denseFromStart);
   const [denseOption, setDenseOption] = React.useState(denseButton);
 
+  React.useEffect(() => {
+    if (URLPage !== undefined) setCurrentPage(URLPage);
+  }, [URLPage]);
+
+  React.useEffect(() => {
+    if (URLPagination !== undefined) setRowsPerPage(URLPagination);
+  }, [URLPagination]);
+
   const handleSearch = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const TMP = [...URLSearch];
-    TMP[searchAttribute] = event.target.value;
+    const val = event.target.value;
+    setLocalSearchText(val);
 
-    // No need when we use URLS
-    // setSearchText(TMP);
-    setURLSearch(TMP);
+    if (URLSearch && setURLSearch) {
+      const TMP = Array.isArray(URLSearch) ? [...URLSearch] : [];
+      TMP[searchAttribute] = val;
+      setURLSearch(TMP);
+    }
   };
 
   const handleSearchAttribute = (event: any, child: any) => {
-    // TODO: This needs server to not return error when inputting weird searches
-    // const TMP = [...URLSearch];
-    // TMP[searchAttribute] = event.target.value;
-    // setURLSearch(
-    //   TMP.map((value) => {
-    //     return "";
-    //   })
-    // );
-    // setURLSearch(TMP);
-
-    setSearchAttribute(child.props["data-index"]);
-    setURLSearchAttribute(child.props["data-index"]);
+    const idx = child?.props?.["data-index"] ?? 0;
+    setSearchAttribute(idx);
+    if (setURLSearchAttribute) {
+      setURLSearchAttribute(idx);
+    }
   };
 
-  const handleRowClick = (index: number) => {
-    setSelectedRow(index);
-    setURLSelected(index);
+  const isServerPaginated =
+    URLPagination !== undefined && URLPage !== undefined;
+
+  // Filter rows locally if not filtered by server
+  const filteredRows = React.useMemo(() => {
+    if (URLSearch || !localSearchText.trim()) {
+      return rows;
+    }
+    const q = localSearchText.toLowerCase();
+    return rows.filter((r) => {
+      const cell = r[searchAttribute];
+      if (typeof cell === "string") {
+        return cell.toLowerCase().includes(q);
+      }
+      if (typeof cell === "number") {
+        return cell.toString().includes(q);
+      }
+      return false;
+    });
+  }, [rows, localSearchText, searchAttribute, URLSearch]);
+
+  const activePage = isServerPaginated ? URLPage : currentPage;
+  const activeRowsPerPage = isServerPaginated ? URLPagination : rowsPerPage;
+
+  const displayRows = React.useMemo(() => {
+    if (isServerPaginated) {
+      return filteredRows;
+    }
+    const start = activePage * activeRowsPerPage;
+    return filteredRows.slice(start, start + activeRowsPerPage);
+  }, [filteredRows, isServerPaginated, activePage, activeRowsPerPage]);
+
+  const handleRowClick = (displayIndex: number) => {
+    setSelectedRow(displayIndex);
+    if (setURLSelected) {
+      const actualIndex = isServerPaginated
+        ? displayIndex
+        : activePage * activeRowsPerPage + displayIndex;
+      setURLSelected(actualIndex);
+    }
+    if (onClick) onClick();
   };
 
-  const handleRowDoubleClick = (index: number) => {
-    console.log("click?");
+  const handleRowDoubleClick = (displayIndex: number) => {
     if (onDoubleClick) onDoubleClick();
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setCurrentPage(newPage);
-    setURLPage(newPage);
+    if (setURLPage) setURLPage(newPage);
     setSelectedRow(-1);
-    setURLSelected(-1);
+    if (setURLSelected) setURLSelected(-1);
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setRowsPerPage(+event.target.value);
-    setURLPagination(+event.target.value);
+    const val = +event.target.value;
+    setRowsPerPage(val);
+    if (setURLPagination) setURLPagination(val);
+    setCurrentPage(0);
+    if (setURLPage) setURLPage(0);
+    setSelectedRow(-1);
+    if (setURLSelected) setURLSelected(-1);
   };
+
+  const totalCount = isServerPaginated
+    ? total ?? filteredRows.length
+    : filteredRows.length;
 
   return (
     <div className={styles.list_container}>
@@ -153,6 +204,7 @@ const list: React.FC<ListProps> = ({
                 <TextField
                   label="Search"
                   variant="outlined"
+                  value={localSearchText}
                   onChange={(event) => handleSearch(event)}
                   sx={{
                     "& fieldset": {
@@ -161,7 +213,7 @@ const list: React.FC<ListProps> = ({
                       borderEndEndRadius: 0,
                     },
                   }}
-                ></TextField>
+                />
                 {/* Rendering the attribute box*/}
                 <FormControl>
                   <Select
@@ -179,7 +231,7 @@ const list: React.FC<ListProps> = ({
                     }}
                   >
                     {columns.map((value, index) => (
-                      <MenuItem value={index} data-index={index}>
+                      <MenuItem key={index} value={index} data-index={index}>
                         {value}
                       </MenuItem>
                     ))}
@@ -238,6 +290,7 @@ const list: React.FC<ListProps> = ({
                       textOverflow: "ellipsis",
                       whiteSpace: "nowrap",
                       width: "100%",
+                      fontWeight: 600,
                     }}
                   >
                     {cell}
@@ -248,18 +301,18 @@ const list: React.FC<ListProps> = ({
           </TableHead>
           {/* Rendering the rows*/}
           <TableBody>
-            {rows.map((row, rowIndex) => (
+            {displayRows.map((row, rowIndex) => (
               <TableRow
                 hover
                 role="checkbox"
                 tabIndex={-1}
-                selected={rowIndex == selectedRow ? true : false}
+                selected={rowIndex === selectedRow}
                 key={rowIndex}
                 onClick={() => handleRowClick(rowIndex)}
-                onDoubleClick={(event) => handleRowDoubleClick(rowIndex)}
+                onDoubleClick={() => handleRowDoubleClick(rowIndex)}
                 sx={{
                   textDecoration: "none",
-                  pointerEvents: "visible",
+                  cursor: "pointer",
                 }}
               >
                 {row.map((cell, cellIndex) => (
@@ -305,16 +358,16 @@ const list: React.FC<ListProps> = ({
         <TablePagination
           rowsPerPageOptions={pagination}
           component="div"
-          count={total}
-          rowsPerPage={rowsPerPage!}
-          page={currentPage!}
+          count={totalCount}
+          rowsPerPage={activeRowsPerPage}
+          page={activePage}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           sx={{ borderTop: "none", overflow: "hidden" }}
-        ></TablePagination>
+        />
       </div>
     </div>
   );
 };
 
-export default list;
+export default ListComponent;

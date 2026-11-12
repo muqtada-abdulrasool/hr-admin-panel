@@ -10,7 +10,19 @@ import SkillBox from "@/components/skill-box/skill-box";
 import { ConfirmPopup } from "../dialoge-popup/dialogue-popup";
 import EmployeeForm from "@/components/fill-in-forms/employee-form";
 
-const UserPanel = () => {
+export interface UserPanelProps {
+  employee?:
+    | any[]
+    | {
+        name?: string;
+        email?: string;
+        phoneNumber?: string;
+        dateOfEmployment?: string;
+        position?: string;
+      };
+}
+
+const UserPanel: React.FC<UserPanelProps> = ({ employee }) => {
   const [del, setDel] = React.useState(false);
   function deleteCurrentUser() {
     console.log("User is deleted");
@@ -25,12 +37,34 @@ const UserPanel = () => {
     setNewEmp(false);
   }
 
+  let empName = "Muqtada Abdulrasool";
+  let empEmail = "Muqtada@gmail.com";
+  let empPhone = "07708415865";
+  let empDate = "22/4/2023";
+  let empPosition = "Front-End Dev";
+
+  if (Array.isArray(employee)) {
+    empName = typeof employee[0] === "string" ? employee[0] : empName;
+    empPhone = typeof employee[1] === "string" ? employee[1] : empPhone;
+    empPosition = typeof employee[2] === "string" ? employee[2] : empPosition;
+    empDate = typeof employee[3] === "string" ? employee[3] : empDate;
+    empEmail = empName.toLowerCase().replace(/\s+/g, ".") + "@company.com";
+  } else if (employee && typeof employee === "object") {
+    empName = employee.name || empName;
+    empEmail =
+      employee.email ||
+      empName.toLowerCase().replace(/\s+/g, ".") + "@company.com";
+    empPhone = employee.phoneNumber || empPhone;
+    empDate = employee.dateOfEmployment || empDate;
+    empPosition = employee.position || empPosition;
+  }
+
   const info = [
-    ["NAME", "Muqtada Abdulrasool"],
-    ["EMAIL", "Muqtada@gmail.com"],
-    ["PHONE NUMBER", "07708415865"],
-    ["DATE OF EMPLOYMENT", "22/4/2023"],
-    ["POSITION", "Front-End Dev"],
+    ["NAME", empName],
+    ["EMAIL", empEmail],
+    ["PHONE NUMBER", empPhone],
+    ["DATE OF EMPLOYMENT", empDate],
+    ["POSITION", empPosition],
   ];
 
   return (
@@ -69,7 +103,6 @@ const UserPanel = () => {
               sx={{
                 height: "2rem",
                 width: "70%",
-                // borderEndStartRadius: "15px",
               }}
             >
               <Typography
@@ -86,7 +119,6 @@ const UserPanel = () => {
               sx={{
                 height: "2rem",
                 width: "30%",
-                // borderEndEndRadius: "15px",
               }}
             >
               <Typography
@@ -100,36 +132,14 @@ const UserPanel = () => {
           <SkillBox
             title="Skills"
             skills={[
-              { name: "Front-End", level: 80 },
+              { name: "Front-End", level: 85 },
+              { name: "TypeScript", level: 75 },
+              { name: "React", level: 80 },
+              { name: "Next.js", level: 70 },
+              { name: "UI/UX Design", level: 65 },
               { name: "C++", level: 40 },
-              { name: "Python", level: 14 },
-              { name: "Back-End", level: 6 },
-              { name: "Design", level: 3 },
-              { name: "Front-End", level: 80 },
-              { name: "C++", level: 40 },
-              { name: "Python", level: 14 },
-              { name: "Back-End", level: 6 },
-              { name: "Design", level: 3 },
-              { name: "Front-End", level: 80 },
-              { name: "C++", level: 40 },
-              { name: "Python", level: 14 },
-              { name: "Back-End", level: 6 },
-              { name: "Design", level: 3 },
-              { name: "Front-End", level: 80 },
-              { name: "C++", level: 40 },
-              { name: "Python", level: 14 },
-              { name: "Back-End", level: 6 },
-              { name: "Design", level: 3 },
-              { name: "Front-End", level: 80 },
-              { name: "C++", level: 40 },
-              { name: "Python", level: 14 },
-              { name: "Back-End", level: 6 },
-              { name: "Design", level: 3 },
-              { name: "Front-End", level: 80 },
-              { name: "C++", level: 40 },
-              { name: "Python", level: 14 },
-              { name: "Back-End", level: 6 },
-              { name: "Design", level: 3 },
+              { name: "Python", level: 35 },
+              { name: "DevOps", level: 30 },
             ]}
           ></SkillBox>
         </div>

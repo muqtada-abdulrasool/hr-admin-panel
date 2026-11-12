@@ -1,24 +1,19 @@
 import React from "react";
 import { BarChart, PieChart } from "@mui/x-charts";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "next/navigation";
 
 import styles from "./overviewwidget.module.css";
 import { Button, Typography } from "@mui/material";
-import FancyHR from "../fancy-hr/fancy-hr";
-
-interface WidgetProps {
-  title: string;
-}
 
 const Data = [20, 13, 49];
-
-const Labels = ["PENDING", "APPROVED", "DECLINED"];
 
 const availableCertificates = 120;
 const availableSkills = 350;
 
 export function RequestsWidget() {
   const { t } = useTranslation();
+  const router = useRouter();
 
   const translatedLabels = [
     t("overview.pending"),
@@ -45,13 +40,19 @@ export function RequestsWidget() {
         height={200}
         hideLegend
       />
-      <Button variant="contained">{t("overview.openRequestPanel")}</Button>
+      <Button
+        variant="contained"
+        onClick={() => router.push("/requests")}
+      >
+        {t("overview.openRequestPanel")}
+      </Button>
     </div>
   );
 }
 
 export function EmployeesWidget() {
   const { t } = useTranslation();
+  const router = useRouter();
 
   return (
     <div className={styles.widget}>
@@ -71,13 +72,19 @@ export function EmployeesWidget() {
         width={200}
         height={200}
       />
-      <Button variant="contained">{t("overview.openEmployeesPanel")}</Button>
+      <Button
+        variant="contained"
+        onClick={() => router.push("/employees")}
+      >
+        {t("overview.openEmployeesPanel")}
+      </Button>
     </div>
   );
 }
 
 export function CertificatesWidget() {
   const { t } = useTranslation();
+  const router = useRouter();
 
   return (
     <div className={styles.widget}>
@@ -85,7 +92,6 @@ export function CertificatesWidget() {
         {t("overview.certificates")}
       </Typography>
 
-      {/* COOL STYLING HERE */}
       <div className={styles.statsContainer}>
         <div className={styles.statBox}>
           <Typography variant="h6" className={styles.stat}>
@@ -105,13 +111,19 @@ export function CertificatesWidget() {
         </div>
       </div>
 
-      <Button variant="contained">{t("overview.openCertificatesPanel")}</Button>
+      <Button
+        variant="contained"
+        onClick={() => router.push("/certificates")}
+      >
+        {t("overview.openCertificatesPanel")}
+      </Button>
     </div>
   );
 }
 
 export function RoadmapsWidget() {
   const { t } = useTranslation();
+  const router = useRouter();
 
   return (
     <div className={styles.widget}>
@@ -134,7 +146,12 @@ export function RoadmapsWidget() {
         height={200}
       />
 
-      <Button variant="contained">{t("overview.openRoadmapsPanel")}</Button>
+      <Button
+        variant="contained"
+        onClick={() => router.push("/roadmaps")}
+      >
+        {t("overview.openRoadmapsPanel")}
+      </Button>
     </div>
   );
 }

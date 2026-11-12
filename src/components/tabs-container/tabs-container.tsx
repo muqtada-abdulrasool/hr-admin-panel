@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./tabscontainer.module.css";
 import { Tab, Tabs } from "@mui/material";
-import { error } from "console";
 
 interface TabsContainerProps {
   tabTitles: string[];
@@ -38,12 +37,12 @@ const TabsContainer: React.FC<TabsContainerProps> = ({
           className={styles.tab_selector}
         >
           {tabTitles.map((tabTitle, index) => (
-            <Tab label={tabTitle} sx={{ fontSize: tabFontSize }} />
+            <Tab key={index} label={tabTitle} sx={{ fontSize: tabFontSize }} />
           ))}
         </Tabs>
         <div className={styles.tab_container}>
           {tabs.map((tab, index) =>
-            selectedTab == index ? tabs[index] : null
+            selectedTab == index ? <div key={index}>{tab}</div> : null
           )}
         </div>
       </div>

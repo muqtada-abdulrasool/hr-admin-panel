@@ -269,7 +269,7 @@ let lightTheme = createTheme({
     foreground: "#ffffff",
     niceRed: "#B83B40",
     niceBlue: "#0C8CE9",
-    niceGreen: "",
+    niceGreen: "#2e7d32",
   },
 });
 
@@ -305,6 +305,7 @@ let darkTheme = createTheme({
     foreground: "#4D4D4D",
     niceRed: "#B83B40",
     niceBlue: "#0C8CE9",
+    niceGreen: "#2e7d32",
   },
 });
 

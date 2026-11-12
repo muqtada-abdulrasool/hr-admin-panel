@@ -2,121 +2,125 @@
 
 import styles from "./requests.module.css";
 
-import useUserApi from "@/auth/devices/user-device";
 import HomePage from "@/components/home-page/home-page";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import List from "@/components/list/list";
-import UserPanel from "@/components/user-panel/user-panel";
-import { useRouter } from "next/navigation";
-import Throbber from "@/components/throbber/throbber";
 import { exampleRequests } from "@/utils/example-data";
 import RequestPanel from "@/components/request-panel/request-panel";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import Capsule from "@/components/capsule/capsule";
 
 export default function Home() {
-  // const router = useRouter();
-  // const [pagination, setPagination] = useState(10);
-  // const [page, setPage] = useState(0);
   const [selected, setSelected] = useState(-1);
+  const [filterType, setFilterType] = useState("all");
 
-  // const [searchText, setSearchText] = useState(["", "", "0", ""]);
-  // const [searchAttribute, setSearchAttribute] = useState(0);
+  const columns = ["Name", "Details", "Sender", "Roadmap", "Status"];
 
-  // const { getUser, userData } = useUserApi();
+  // Process rows with proper status capsules
+  const processedRows = useMemo(() => {
+    return exampleRequests.map((req) => {
+      const title = req[0];
+      const details = req[1];
+      const sender = req[2];
+      const roadmap = req[3];
+      const rawStatus = (req[4] || "").toString();
 
-  // useEffect(() => {
-  //   getUser(searchText[2], page + 1, pagination, searchText[0]);
-  //   console.log(selected);
-  // }, [getUser, pagination, page, searchText, searchAttribute]);
+      let statusCapsule = <Capsule color="warning-main" text="Pending" />;
+      let category = "pen";
 
-  // if (userData != undefined) {
-  //   let JSONBODY = JSON.parse(userData);
-  //   let columns = ["Email", "Roles", "User ID", "Status"];
-  //   let total = JSONBODY.total;
-  //   let rows = JSONBODY.data.map((user: any) => [
-  //     user.email,
-  //     user.roles.join(", "),
-  //     user.user_id,
-  //     user.entity_Status,
-  //   ]);
+      if (rawStatus.includes("Finished") || rawStatus.includes("Approved") || rawStatus.includes("✅")) {
+        statusCapsule = <Capsule color="success-main" text="Approved" />;
+        category = "app";
+      } else if (rawStatus.includes("Progress") || rawStatus.includes("⚙️")) {
+        statusCapsule = <Capsule color="niceBlue" text="In Progress" />;
+        category = "prog";
+      } else if (rawStatus.includes("Declined")) {
+        statusCapsule = <Capsule color="niceRed" text="Declined" />;
+        category = "dec";
+      } else {
+        statusCapsule = <Capsule color="warning-main" text="Pending" />;
+        category = "pen";
+      }
 
-  let columns = ["Name", "Details", "Sender", "Roadmap", "Status"];
-  let exampleRows: any[][] = exampleRequests;
+      return {
+        displayRow: [title, details, sender, roadmap, statusCapsule],
+        category,
+        title,
+        details,
+        sender,
+        roadmap,
+      };
+    });
+  }, []);
 
-  for (let i = 0; i < exampleRows.length; i++) {
-    exampleRows[i][4] = (
-      <Capsule color="success-main" text="Declined"></Capsule>
-    );
-  }
+  const filteredItems = useMemo(() => {
+    if (filterType === "all") return processedRows;
+    return processedRows.filter((item) => item.category === filterType);
+  }, [processedRows, filterType]);
+
+  const displayTableRows = useMemo(() => {
+    return filteredItems.map((item) => item.displayRow);
+  }, [filteredItems]);
+
+  const selectedItem =
+    selected >= 0 && selected < filteredItems.length
+      ? filteredItems[selected]
+      : null;
+
+  const handleFilterChange = (event: SelectChangeEvent<string>) => {
+    setFilterType(event.target.value);
+    setSelected(-1);
+  };
 
   const content = (
     <div className={styles.content_container}>
       <div className={styles.list_container}>
         <List
-          listTitle="Test Requests Table"
+          listTitle="Requests"
           columns={columns}
-          rows={exampleRows}
-          total={exampleRows.length}
-          pagination={[2, 4, 10]}
+          rows={displayTableRows}
+          total={displayTableRows.length}
+          pagination={[5, 10, 25]}
           setURLSelected={setSelected}
           leftFuncComponents={[
-            <FormControl size="medium" sx={{ width: "6rem" }}>
-              <InputLabel>Filter Type</InputLabel>
+            <FormControl key="filter-select" size="small" sx={{ minWidth: "8rem" }}>
+              <InputLabel>Status</InputLabel>
               <Select
-                value={"all"}
-                label="Language"
-                // onChange={handleLangChange}
+                value={filterType}
+                label="Status"
+                onChange={handleFilterChange}
                 autoWidth
               >
                 <MenuItem value="all">ALL</MenuItem>
                 <MenuItem value="pen">PENDING</MenuItem>
-                <MenuItem value="dec">DECLINED</MenuItem>
+                <MenuItem value="prog">IN PROGRESS</MenuItem>
                 <MenuItem value="app">APPROVED</MenuItem>
+                <MenuItem value="dec">DECLINED</MenuItem>
               </Select>
             </FormControl>,
           ]}
-          // URLPagination={pagination}
-          // setURLPagination={setPagination}
-          // URLPage={page}
-          // setURLPage={setPage}
-          // URLSearch={searchText}
-          // setURLSearch={setSearchText}
-          // setURLSearchAttribute={setSearchAttribute}
-          // onDoubleClick={() => {
-          //   router.push("/employees/" + selected);
-          // }}
           searchBox
           denseButton
           denseFromStart
-        ></List>
+        />
       </div>
-      {selected == -1 ? null : (
+      {selectedItem ? (
         <RequestPanel
-          requestTitle="Roadmap Step Requeast"
-          requestSender="Ali Maadrymino"
+          requestTitle={selectedItem.title}
+          requestSender={selectedItem.sender}
           requestAttachment="/images/placeholder/ein.jpg"
-          requestDetails="I was stuck here for so long, like, OMG. Jeez, who thought you needed to have Wi-Fi to pass the CCNA test? Like, NO ONE WOULD KNOW. Jeez, you guys make it difficult."
-          requestRoadmap="cool roadmap"
-        ></RequestPanel>
-      )}
+          requestDetails={selectedItem.details}
+          requestRoadmap={selectedItem.roadmap}
+        />
+      ) : null}
     </div>
   );
+
   return (
     <HomePage
       content={content}
       contextBoxVisibility={false}
       sideBarIndex={1}
-    ></HomePage>
+    />
   );
 }
-// else {
-//   return (
-//     <HomePage
-//       content={<Throbber></Throbber>}
-//       contextBoxVisibility={false}
-//       sideBarIndex={1}
-//     ></HomePage>
-//   );
-// }
-// }

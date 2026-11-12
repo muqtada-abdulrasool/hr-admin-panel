@@ -1,6 +1,6 @@
 "use client";
 
-import "@/globals.css";
+import "../globals.css";
 import React, { useEffect } from "react";
 import styles from "./home.module.css";
 import { lightTheme, darkTheme } from "@/theme";
@@ -10,6 +10,7 @@ import { AuthProvider } from "@/auth/auth-context";
 import { I18nextProvider } from "react-i18next";
 import DirectionProvider from "@/utils/direction-provider";
 import i18n from "@/utils/i18n";
+import MSWComponent from "@/mocks/MSWComponent";
 
 export default function RootLayout({
   children,
@@ -29,15 +30,17 @@ export default function RootLayout({
         ></link>
       </head>
       <body className={styles.root_container}>
-        <I18nextProvider i18n={i18n}>
-          <DirectionProvider>
-            <AppRouterCacheProvider>
-              <AuthProvider>
-                <ThemeContextProvider>{children}</ThemeContextProvider>
-              </AuthProvider>
-            </AppRouterCacheProvider>
-          </DirectionProvider>
-        </I18nextProvider>
+        <MSWComponent>
+          <I18nextProvider i18n={i18n}>
+            <DirectionProvider>
+              <AppRouterCacheProvider>
+                <AuthProvider>
+                  <ThemeContextProvider>{children}</ThemeContextProvider>
+                </AuthProvider>
+              </AppRouterCacheProvider>
+            </DirectionProvider>
+          </I18nextProvider>
+        </MSWComponent>
       </body>
     </html>
   );

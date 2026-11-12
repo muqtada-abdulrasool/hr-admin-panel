@@ -23,10 +23,6 @@ export default function Home() {
     setCer(true);
   }
 
-  function handleAddClick() {
-    setAdd(true);
-  }
-
   function handleClose() {
     setAdd(false);
   }
@@ -35,16 +31,31 @@ export default function Home() {
   }
 
   function handleDoubleClick() {
-    router.push("/roadmaps/1");
+    const id = selected >= 0 ? selected + 1 : 1;
+    router.push("/roadmaps/" + id);
   }
 
-  let columns = [
+  const columns = [
     "Title",
     "Step Count",
     "Estimated Completion Time",
     "Difficulty",
   ];
-  let exampleRows = exampleRoadmaps;
+  const exampleRows = exampleRoadmaps;
+
+  const selectedRoadmap =
+    selected >= 0 && selected < exampleRows.length
+      ? exampleRows[selected]
+      : null;
+
+  const defaultSteps = [
+    { title: "Foundations & Core Principles", certificateId: "14210" },
+    { title: "CompTIA Security+ Certification", certificateId: "14211" },
+    { title: "Cisco Certified Network Associate (CCNA)", certificateId: "14212" },
+    { title: "Cloud Architecture Fundamentals", certificateId: "14213" },
+    { title: "Certified Kubernetes Administrator", certificateId: "14214" },
+    { title: "Senior System Engineering Capstone", certificateId: "14215" },
+  ];
 
   const content = (
     <div className={styles.content_container}>
@@ -52,39 +63,30 @@ export default function Home() {
         handleClose={handleClose}
         handleConfirm={handleConfirm}
         state={add}
-      ></RoadmapForm>
+      />
       <div className={styles.list_container}>
         <List
-          listTitle="Test Roadmaps Table"
+          listTitle="Roadmaps"
           columns={columns}
           rows={exampleRows}
           total={exampleRows.length}
-          pagination={[2, 4, 10]}
+          pagination={[5, 10, 25]}
           setURLSelected={setSelected}
           rightFuncComponents={[
-            <Fab color="primary" onClick={() => setAdd(true)}>
+            <Fab key="add-roadmap" color="primary" onClick={() => setAdd(true)}>
               <Add />
             </Fab>,
           ]}
           onDoubleClick={handleDoubleClick}
           searchBox
           denseButton
-        ></List>
+        />
       </div>
-      {selected == -1 ? null : (
+      {selected === -1 ? null : (
         <Roadmap
+          title={selectedRoadmap ? selectedRoadmap[0] : "Roadmap Progress"}
           setCertificate={handleCerClick}
-          steps={[
-            { title: "Obtain CCNA 2025", certificateId: "14212" },
-            { title: "Obtain Your Mom", certificateId: "14212" },
-            { title: "Obtain CCNA 2025", certificateId: "14212" },
-            { title: "Obtain CCNA 2025", certificateId: "14212" },
-            { title: "Obtain CCNA 2025", certificateId: "14212" },
-            { title: "Obtain CCNA 2025", certificateId: "14212" },
-            { title: "Obtain CCNA 2025", certificateId: "14212" },
-            { title: "Obtain CCNA 2025", certificateId: "14212" },
-            { title: "Obtain CCNA 2025", certificateId: "14212" },
-          ]}
+          steps={defaultSteps}
         />
       )}
       {!cer ? null : (
@@ -102,11 +104,12 @@ export default function Home() {
       )}
     </div>
   );
+
   return (
     <HomePage
       content={content}
       contextBoxVisibility={false}
       sideBarIndex={4}
-    ></HomePage>
+    />
   );
 }

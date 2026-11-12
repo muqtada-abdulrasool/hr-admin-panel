@@ -10,11 +10,11 @@ import { exampleActiveEmployees } from "@/utils/example-data";
 import CertificatePanel from "@/components/certificate-panel/certificate-panel";
 import { useRouter } from "next/navigation";
 
-export default function page() {
+export default function RoadmapDetailPage() {
   const router = useRouter();
   const [cer, setCer] = useState(false);
-  let columns = ["Name", "Current Progress"];
-  let exampleRows = exampleActiveEmployees;
+  const columns = ["Name", "Current Progress"];
+  const exampleRows = exampleActiveEmployees;
 
   function handleCerClick(ID: string) {
     setCer(true);
@@ -24,29 +24,31 @@ export default function page() {
     router.push("/employees/1");
   }
 
+  const steps = [
+    { title: "Network Fundamentals (CompTIA Network+)", certificateId: "14201" },
+    { title: "Cybersecurity Core (CompTIA Security+)", certificateId: "14202" },
+    { title: "Routing & Switching (CCNA 2025)", certificateId: "14203" },
+    { title: "Linux Administration (RHCSA)", certificateId: "14204" },
+    { title: "Cloud Architecture (AWS Associate)", certificateId: "14205" },
+    { title: "DevOps & Containers (CKA)", certificateId: "14206" },
+    { title: "Senior Enterprise Architect (CCNP)", certificateId: "14207" },
+  ];
+
   const content = (
     <div className={styles.roadmap_container}>
       <Roadmap
+        title="Network & Systems Engineering Roadmap"
         setCertificate={handleCerClick}
-        steps={[
-          { title: "Obtain CCNA 2025", certificateId: "14212" },
-          { title: "Obtain CCNA 2025", certificateId: "14212" },
-          { title: "Obtain CCNA 2025", certificateId: "14212" },
-          { title: "Obtain CCNA 2025", certificateId: "14212" },
-          { title: "Obtain CCNA 2025", certificateId: "14212" },
-          { title: "Obtain CCNA 2025", certificateId: "14212" },
-          { title: "Obtain CCNA 2025", certificateId: "14212" },
-          { title: "Obtain CCNA 2025", certificateId: "14212" },
-          { title: "Obtain CCNA 2025", certificateId: "14212" },
-        ]}
+        steps={steps}
       />
       <div className={styles.employees_container}>
         <List
+          listTitle="Enrolled Employees"
           columns={columns}
           rows={exampleRows}
           total={exampleRows.length}
           onDoubleClick={handleEmployeeClick}
-        ></List>
+        />
       </div>
       {!cer ? null : (
         <CertificatePanel
@@ -63,11 +65,12 @@ export default function page() {
       )}
     </div>
   );
+
   return (
     <HomePage
-      sideBarIndex={-1}
+      sideBarIndex={4}
       content={content}
       contextBoxVisibility={false}
-    ></HomePage>
+    />
   );
 }

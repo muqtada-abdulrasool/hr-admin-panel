@@ -24,8 +24,8 @@ export default function Home() {
   const [searchAttribute, setSearchAttribute] = useState(0);
 
   const auth = useAuthContext();
-  const jwt = auth.jwt;
-  const fetchNewJwt = auth.fetchNewJwt;
+  const jwt = auth?.jwt;
+  const fetchNewJwt = auth?.fetchNewJwt;
 
   const [newEmp, setNewEmp] = useState(false);
   function handleClose() {
@@ -36,7 +36,7 @@ export default function Home() {
   }
 
   const { loading, getUsers } = useUser(jwt, fetchNewJwt);
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState<any>();
 
   useEffect(() => {
     if (jwt) {
@@ -44,73 +44,85 @@ export default function Home() {
     }
   }, [jwt, pagination, page, searchText, searchAttribute]);
 
-  if (!loading && userData) {
-    let JSONBODY = JSON.parse(userData);
-    let columns = ["Email", "Roles", "User ID", "Status"];
-    let total = JSONBODY.total;
-    let rows = JSONBODY.data.map((user: any) => [
-      user.email,
-      user.roles.join(", "),
-      user.user_id,
-      user.entity_Status,
-    ]);
-    // const exampleRows = exampleEmployees;
+  // Safe data extraction
+  let parsedRows: any[][] = [];
+  let parsedTotal = 0;
 
-    const content = (
-      <div className={styles.content_container}>
-        <EmployeeForm
-          state={newEmp}
-          handleClose={handleClose}
-          handleConfirm={handleConfirm}
-        ></EmployeeForm>
-        <div className={styles.list_container}>
-          <List
-            listTitle="Test Employees Table"
-            columns={[
-              "Name",
-              "Phone Number",
-              "Position",
-              "Date of Employement",
-            ]}
-            rows={rows}
-            total={total}
-            pagination={[2, 4, 20]}
-            setURLSelected={setSelected}
-            URLPagination={pagination}
-            setURLPagination={setPagination}
-            URLPage={page}
-            setURLPage={setPage}
-            URLSearch={searchText}
-            setURLSearch={setSearchText}
-            setURLSearchAttribute={setSearchAttribute}
-            onDoubleClick={() => {
-              router.push("/employees/" + selected);
-            }}
-            rightFuncComponents={[
-              <Fab color="primary" onClick={() => setNewEmp(true)}>
-                <Add />
-              </Fab>,
-            ]}
-            searchBox
-          ></List>
-        </div>
-        {selected == -1 ? null : <UserPanel></UserPanel>}
-      </div>
-    );
-    return (
-      <HomePage
-        content={content}
-        contextBoxVisibility={false}
-        sideBarIndex={2}
-      ></HomePage>
-    );
-  } else {
-    return (
-      <HomePage
-        content={<Throbber></Throbber>}
-        contextBoxVisibility={false}
-        sideBarIndex={2}
-      ></HomePage>
-    );
+  if (userData) {
+    try {
+      const jsonBody =
+        typeof userData === "string" ? JSON.parse(userData) : userData;
+      if (jsonBody?.data && Array.isArray(jsonBody.data)) {
+        parsedRows = jsonBody.data.map((user: any) => {
+          if (Array.isArray(user)) return user;
+          return [
+            user.name || user.email || "Employee",
+            user.phoneNumber || user.phone || user.roles?.join(", ") || "",
+            user.position || user.roles?.[0] || "Staff",
+            user.dateOfEmployment || user.entity_Status || "—",
+          ];
+        });
+        parsedTotal = jsonBody.total || parsedRows.length;
+      }
+    } catch (err) {
+      console.warn("Failed to parse user data:", err);
+    }
   }
+
+  // If parsed data is available use it, otherwise fall back to exampleEmployees
+  const activeRows = parsedRows.length > 0 ? parsedRows : exampleEmployees;
+  const activeTotal = parsedTotal > 0 ? parsedTotal : exampleEmployees.length;
+
+  const content = (
+    <div className={styles.content_container}>
+      <EmployeeForm
+        state={newEmp}
+        handleClose={handleClose}
+        handleConfirm={handleConfirm}
+      />
+      <div className={styles.list_container}>
+        <List
+          listTitle="Employees"
+          columns={[
+            "Name",
+            "Phone Number",
+            "Position",
+            "Date of Employment",
+          ]}
+          rows={activeRows}
+          total={activeTotal}
+          pagination={[5, 10, 20]}
+          setURLSelected={setSelected}
+          URLPagination={pagination}
+          setURLPagination={setPagination}
+          URLPage={page}
+          setURLPage={setPage}
+          URLSearch={searchText}
+          setURLSearch={setSearchText}
+          setURLSearchAttribute={setSearchAttribute}
+          onDoubleClick={() => {
+            const id = selected >= 0 ? selected + 1 : 1;
+            router.push("/employees/" + id);
+          }}
+          rightFuncComponents={[
+            <Fab key="add-emp" color="primary" onClick={() => setNewEmp(true)}>
+              <Add />
+            </Fab>,
+          ]}
+          searchBox
+        />
+      </div>
+      {selected === -1 ? null : (
+        <UserPanel employee={activeRows[selected]} />
+      )}
+    </div>
+  );
+
+  return (
+    <HomePage
+      content={content}
+      contextBoxVisibility={false}
+      sideBarIndex={2}
+    />
+  );
 }

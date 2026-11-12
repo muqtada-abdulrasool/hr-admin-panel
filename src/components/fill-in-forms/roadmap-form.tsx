@@ -31,6 +31,7 @@ export default function RoadmapForm({
   for (let i = 0; i < stepCount; i++) {
     steps.push(
       <Autocomplete
+        key={i}
         multiple
         options={exampleCertifications}
         getOptionLabel={(option) => option.title}
@@ -39,8 +40,8 @@ export default function RoadmapForm({
           <TextField
             {...params}
             variant="filled"
-            label="Multiple values"
-            placeholder="Favorites"
+            label={`Step ${i + 1} Required Certification`}
+            placeholder="Select certification..."
           />
         )}
       />

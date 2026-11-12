@@ -70,7 +70,7 @@ const RequestPanel: React.FC<RequestPanelProps> = ({
               <Typography variant="h6">
                 By{" "}
                 <Link
-                  href={"employees/1"} //TODO
+                  href={"/employees/1"}
                   style={{ color: "var(--mui-palette-primary-main)" }}
                 >
                   {requestSender}
@@ -79,10 +79,10 @@ const RequestPanel: React.FC<RequestPanelProps> = ({
               <Typography variant="h6">
                 From{" "}
                 <Link
-                  href={"roadmaps/1"} //TODO
+                  href={"/roadmaps/1"}
                   style={{ color: "var(--mui-palette-primary-main)" }}
                 >
-                  CCNA 2025
+                  {requestRoadmap || "General Roadmap"}
                 </Link>
               </Typography>
               <div

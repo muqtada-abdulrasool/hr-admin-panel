@@ -5,22 +5,25 @@ export const getData = async (
   fetchNewJwt: any,
   pathAndParams: string
 ) => {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
 
   const makeRequest = async (token: string | null | undefined) => {
     try {
-      const response = await fetch(`${apiUrl}/${pathAndParams}`, {
+      const url = apiUrl.startsWith("http")
+        ? `${apiUrl}/${pathAndParams}`
+        : `/${pathAndParams}`;
+
+      const response = await fetch(url, {
         method: "GET",
         credentials: "include",
         headers: {
           Authorization: `bearer ${token}`,
-          accept: "/",
+          accept: "application/json",
         },
       });
 
       if (response.status === 401) {
         const newJwt = await fetchNewJwt();
-        console.log("AHHH");
         if (newJwt) {
           return await makeRequest(newJwt);
         } else {
@@ -28,8 +31,12 @@ export const getData = async (
         }
       }
 
-      const data = await response.json();
-      setData(data.data);
+      if (response.ok) {
+        const data = await response.json();
+        setData(data.data !== undefined ? data.data : data);
+      }
+    } catch (err) {
+      console.warn("getData error:", err);
     } finally {
       setLoading(false);
     }

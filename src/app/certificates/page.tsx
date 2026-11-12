@@ -2,27 +2,19 @@
 
 import styles from "./certificates.module.css";
 
-import useUserApi from "@/auth/devices/user-device";
 import HomePage from "@/components/home-page/home-page";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import List from "@/components/list/list";
-import UserPanel from "@/components/user-panel/user-panel";
-import { useRouter } from "next/navigation";
-import Throbber from "@/components/throbber/throbber";
 import { exampleCertificates } from "@/utils/example-data";
-import RequestPanel from "@/components/request-panel/request-panel";
-import { Fab, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { Fab } from "@mui/material";
 import CertificateForm from "@/components/fill-in-forms/certificate-form";
 import { Add } from "@mui/icons-material";
 import CertificatePanel from "@/components/certificate-panel/certificate-panel";
 
 export default function Home() {
-  // const router = useRouter();
-  // const [pagination, setPagination] = useState(10);
-  // const [page, setPage] = useState(0);
   const [selected, setSelected] = useState(-1);
-
   const [newCer, setNewCer] = useState(false);
+
   function handleClose() {
     setNewCer(false);
   }
@@ -30,35 +22,19 @@ export default function Home() {
     setNewCer(false);
   }
 
-  // const [searchText, setSearchText] = useState(["", "", "0", ""]);
-  // const [searchAttribute, setSearchAttribute] = useState(0);
-
-  // const { getUser, userData } = useUserApi();
-
-  // useEffect(() => {
-  //   getUser(searchText[2], page + 1, pagination, searchText[0]);
-  //   console.log(selected);
-  // }, [getUser, pagination, page, searchText, searchAttribute]);
-
-  // if (userData != undefined) {
-  //   let JSONBODY = JSON.parse(userData);
-  //   let columns = ["Email", "Roles", "User ID", "Status"];
-  //   let total = JSONBODY.total;
-  //   let rows = JSONBODY.data.map((user: any) => [
-  //     user.email,
-  //     user.roles.join(", "),
-  //     user.user_id,
-  //     user.entity_Status,
-  //   ]);
-
-  let columns = [
+  const columns = [
     "Name",
-    "Submition Date",
+    "Submission Date",
     "Expiration Date",
     "Subject",
     "Points to Skills",
   ];
-  let exampleRows = exampleCertificates;
+  const exampleRows = exampleCertificates;
+
+  const selectedCert =
+    selected >= 0 && selected < exampleRows.length
+      ? exampleRows[selected]
+      : null;
 
   const content = (
     <div className={styles.content_container}>
@@ -66,65 +42,51 @@ export default function Home() {
         state={newCer}
         handleClose={handleClose}
         handleConfirm={handleConfirm}
-      ></CertificateForm>
+      />
       <div className={styles.list_container}>
         <List
-          listTitle="Test Certificates Table"
+          listTitle="Certificates"
           columns={columns}
           rows={exampleRows}
           total={exampleRows.length}
-          pagination={[2, 4, 10]}
+          pagination={[5, 10, 25]}
           setURLSelected={setSelected}
           rightFuncComponents={[
-            <Fab color="primary" onClick={() => setNewCer(true)}>
+            <Fab key="add-cert" color="primary" onClick={() => setNewCer(true)}>
               <Add />
             </Fab>,
           ]}
-          // URLPagination={pagination}
-          // setURLPagination={setPagination}
-          // URLPage={page}
-          // setURLPage={setPage}
-          // URLSearch={searchText}
-          // setURLSearch={setSearchText}
-          // setURLSearchAttribute={setSearchAttribute}
-          // onDoubleClick={() => {
-          //   router.push("/employees/" + selected);
-          // }}
           searchBox
           denseButton
           denseFromStart
-        ></List>
+        />
       </div>
-      {selected == -1 ? null : (
+      {selectedCert ? (
         <CertificatePanel
-          certificateTitle="CCNA 2025: Cisco Certified Network Associate"
-          certificateDetails="This certification validates a professional's foundational knowledge of networking. The CCNA 2025 exam covers a broad range of topics including network fundamentals, IP connectivity, security, automation, and programmability."
+          certificateTitle={selectedCert[0]}
+          certificateDetails={`Professional certification in ${selectedCert[3]}, issued on ${selectedCert[1]} and valid through ${selectedCert[2]}. Awarded ${selectedCert[4]} points toward relevant technical competencies.`}
           certificateAttachment="/images/placeholder/ein.jpg"
           skillsAndPoints={[
-            { name: "Network", level: 30 },
-            { name: "Back-End", level: 19 },
-            { name: "C++", level: 18 },
-            { name: "C#", level: 10 },
+            { name: selectedCert[3], level: Number(selectedCert[4]) || 50 },
+            {
+              name: "Technical Proficiency",
+              level: Math.min(100, Math.round((Number(selectedCert[4]) || 50) * 0.8)),
+            },
+            {
+              name: "Domain Knowledge",
+              level: Math.min(100, Math.round((Number(selectedCert[4]) || 50) * 0.6)),
+            },
           ]}
         />
-      )}
+      ) : null}
     </div>
   );
+
   return (
     <HomePage
       content={content}
       contextBoxVisibility={false}
       sideBarIndex={3}
-    ></HomePage>
+    />
   );
 }
-// else {
-//   return (
-//     <HomePage
-//       content={<Throbber></Throbber>}
-//       contextBoxVisibility={false}
-//       sideBarIndex={1}
-//     ></HomePage>
-//   );
-// }
-// }

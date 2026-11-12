@@ -40,11 +40,14 @@ function AttachmentBox({
   };
 
   useEffect(() => {
-    if (imgSrc != "") {
+    if (imgSrc !== "") {
       setAttached(true);
       setImage(imgSrc);
+    } else {
+      setAttached(false);
+      setImage("");
     }
-  }, []);
+  }, [imgSrc]);
 
   return (
     <div

@@ -74,8 +74,8 @@ export default function CertificateForm({
                   <TextField
                     {...params}
                     variant="filled"
-                    label="Multiple values"
-                    placeholder="Favorites"
+                    label="Associated Skills & Certifications"
+                    placeholder="Select skills..."
                   />
                 )}
               />

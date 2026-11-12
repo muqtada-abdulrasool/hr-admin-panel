@@ -7,7 +7,7 @@ export const postData = async (
   contentType = "application/json"
 ) => {
   setLoading(true);
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
 
   const makeRequest = async (token: string | null | undefined) => {
     try {
@@ -19,11 +19,20 @@ export const postData = async (
         headers["Content-Type"] = contentType;
       }
 
-      const response = await fetch(`${apiUrl}/${pathAndParams}`, {
+      const url = apiUrl.startsWith("http")
+        ? `${apiUrl}/${pathAndParams}`
+        : `/${pathAndParams}`;
+
+      const requestBody =
+        contentType === "application/json" && typeof body !== "string"
+          ? JSON.stringify(body)
+          : body;
+
+      const response = await fetch(url, {
         method: "POST",
         credentials: "include",
         headers: headers,
-        body: contentType == "application/json" ? JSON.stringify(body) : body,
+        body: requestBody,
       });
 
       if (response.status === 401) {
@@ -35,10 +44,12 @@ export const postData = async (
         }
       }
 
-      const data = await response.json();
-      return data;
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      }
     } catch (err: any) {
-      console.error("Error in createAccount:", err.message);
+      console.warn("postData error:", err?.message || err);
     } finally {
       setLoading(false);
     }

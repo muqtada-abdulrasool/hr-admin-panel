@@ -67,6 +67,10 @@ const Sidebar: React.FC<SidebarProps> = ({ index = 0, popup, settings }) => {
   }, []);
 
   useEffect(() => {
+    setSelectedIndex(index);
+  }, [index]);
+
+  useEffect(() => {
     if (popup) {
       setLocked(true);
     }

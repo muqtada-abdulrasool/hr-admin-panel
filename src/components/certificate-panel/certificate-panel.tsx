@@ -43,7 +43,7 @@ const CertificatePanel: React.FC<RequestPanelProps> = ({
         <ConfirmPopup
           state={remove}
           header="Confirm Removal"
-          body="Are you sure you want to renive this certificate?"
+          body="Are you sure you want to remove this certificate?"
           color="error"
           handleClose={() => setRemove(false)}
           handleConfirm={() => setRemove(false)}

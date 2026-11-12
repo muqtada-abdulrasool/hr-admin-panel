@@ -5,11 +5,15 @@ export const deleteData = async (
   pathAndParams: string
 ) => {
   setLoading(true);
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
 
   const makeRequest = async (token: string | null | undefined) => {
     try {
-      const response = await fetch(`${apiUrl}/${pathAndParams}`, {
+      const url = apiUrl.startsWith("http")
+        ? `${apiUrl}/${pathAndParams}`
+        : `/${pathAndParams}`;
+
+      const response = await fetch(url, {
         method: "DELETE",
         credentials: "include",
         headers: {
@@ -27,10 +31,12 @@ export const deleteData = async (
         }
       }
 
-      const data = await response.json();
-      return data;
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      }
     } catch (err: any) {
-      console.log("Error in createTransaction:", err.message);
+      console.warn("deleteData error:", err?.message || err);
     } finally {
       setLoading(false);
     }
