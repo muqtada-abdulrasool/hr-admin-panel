@@ -25,6 +25,7 @@ export default function EmployeeForm({
   handleClose = Function,
   handleConfirm = Function,
 }: FillInProps) {
+  const [position, setPosition] = React.useState("frontend");
   return (
     <Dialog open={state} maxWidth="md" fullWidth>
       <DialogTitle>Employee Form</DialogTitle>
@@ -97,10 +98,18 @@ export default function EmployeeForm({
               </LocalizationProvider>
               <FormControl size="medium" sx={{ width: "33%" }}>
                 <InputLabel>Position</InputLabel>
-                <Select value={"all"} label="Position" autoWidth>
-                  <MenuItem value="all">Front-End Developer</MenuItem>
-                  <MenuItem value="pen">Back-End Developer</MenuItem>
-                  <MenuItem value="dec">HR</MenuItem>
+                <Select
+                  value={position}
+                  label="Position"
+                  onChange={(e) => setPosition(e.target.value)}
+                  autoWidth
+                >
+                  <MenuItem value="frontend">Front-End Developer</MenuItem>
+                  <MenuItem value="backend">Back-End Developer</MenuItem>
+                  <MenuItem value="hr">Human Resources</MenuItem>
+                  <MenuItem value="devops">DevOps Engineer</MenuItem>
+                  <MenuItem value="design">UI/UX Designer</MenuItem>
+                  <MenuItem value="pm">Product Manager</MenuItem>
                 </Select>
               </FormControl>
               <TextField
